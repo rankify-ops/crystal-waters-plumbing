@@ -15,7 +15,9 @@ import "./globals.css";
  */
 const geist = Geist({
   subsets: ["latin"],
-  weight: ["400", "500", "600"],
+  // 700/800 added for the hero headline, which follows the Geelong Heat Pumps
+  // spec: sentence case at 800 rather than uppercase at 600.
+  weight: ["400", "500", "600", "700", "800"],
   variable: "--font-geist",
   display: "swap",
 });

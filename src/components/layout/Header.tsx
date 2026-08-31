@@ -124,7 +124,7 @@ export function Header() {
             />
           </Link>
 
-          <nav className="hidden lg:flex items-center gap-1">
+          <nav className="hidden lg:flex items-center gap-7">
             {NAV.map((item) => {
               const active =
                 item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
@@ -132,7 +132,7 @@ export function Header() {
                 <div key={item.href} className="group relative">
                   <Link
                     href={item.href}
-                    className="mi flex items-center gap-1.5 px-3.5 py-2.5 transition-colors hover:text-aqua"
+                    className="navlink hover:text-aqua"
                     style={{ color: active ? "var(--aqua)" : undefined }}
                   >
                     {item.label}
@@ -163,7 +163,7 @@ export function Header() {
                           <Link
                             key={child.slug}
                             href={`/services/${child.slug}/`}
-                            className="mi block px-5 py-3 text-ink transition-colors hover:bg-[rgba(0,166,224,0.08)] hover:text-aqua"
+                            className="block rounded-lg px-4 py-2.5 text-[13.6px] font-medium text-ink transition-colors hover:bg-[rgba(0,166,224,0.08)] hover:text-aqua"
                           >
                             {child.nav}
                           </Link>
@@ -171,7 +171,7 @@ export function Header() {
                         <div className="mx-5 my-2 h-px bg-[rgba(6,42,68,0.09)]" />
                         <Link
                           href="/services/all-services/"
-                          className="mi block px-5 py-3 text-ink/55 transition-colors hover:bg-[rgba(0,166,224,0.08)] hover:text-aqua"
+                          className="block rounded-lg px-4 py-2.5 text-[13.6px] font-medium text-ink/55 transition-colors hover:bg-[rgba(0,166,224,0.08)] hover:text-aqua"
                         >
                           All services
                         </Link>
@@ -187,7 +187,7 @@ export function Header() {
             {/* Plain bold text on desktop — one filled control in the bar. */}
             <a
               href={site.phoneHref}
-              className="mi-lg hidden xl:flex items-center gap-2 transition-colors hover:text-aqua"
+              className="hidden xl:flex items-center gap-2 text-[13.9px] font-bold transition-colors hover:text-aqua"
             >
               <Phone size={15} />
               {site.phone}
@@ -198,7 +198,7 @@ export function Header() {
                 thumb reach — two of them stacked in the same view is how a site
                 starts reading as an ad. It stays on desktop, where there is no
                 call bar. */}
-            <QuoteLink className="pill hidden sm:inline-flex">
+            <QuoteLink className="pill pill-sm hidden sm:inline-flex">
               Free quote
               <Arrow size={13} />
             </QuoteLink>
@@ -273,11 +273,11 @@ export function Header() {
 
           <div className="mt-auto pt-8">
             <div className="flex flex-col gap-2.5">
-              <a href={site.phoneHref} className="pill w-full !py-3.5">
+              <a href={site.phoneHref} className="pill w-full">
                 <Phone size={15} />
                 {site.phone}
               </a>
-              <QuoteLink className="pill pill-ghost w-full !py-3.5">
+              <QuoteLink className="pill pill-ghost w-full">
                 Get a free quote
                 <Arrow size={13} />
               </QuoteLink>

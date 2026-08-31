@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { site, yearsTrading } from "@/content/site";
 import { Photo } from "@/components/ui/Photo";
 import { Reveal } from "@/components/ui/Reveal";
@@ -17,10 +18,16 @@ import { QuoteLink } from "@/components/ui/QuoteLink";
  * reading before swapping it: the library has no usable wide shot of the team
  * without a van in it, so the page currently leads on the work.
  *
- * The photograph carries a three-part wash: a flat tint, a left-weighted ramp
- * under the type, and a bottom edge, plus a top edge that seats the
- * transparent header. White type over an unwashed photo is a coin toss;
- * washing only the side the type sits on keeps the picture visible.
+ * SIZING AND SPACING are ported from the Geelong Heat Pumps hero
+ * (geelong-heat-pumps/assets/site.css) — its rem values converted to px in
+ * globals.css so a different root size cannot rescale them. That reference is
+ * why the headline here is sentence case at weight 800 rather than the
+ * uppercase 600 the rest of this site uses.
+ *
+ * Two things deliberately depart from it, both because this content is not
+ * that content: the headline clamp floor (theirs clips "plumbing & drainage"
+ * mid-word on a phone) and the two-column button grid below sm (theirs lets
+ * the buttons run at natural width, which left them misaligned with the cards).
  */
 export function Hero() {
   return (
@@ -35,66 +42,57 @@ export function Hero() {
           // portrait and landscape framings — see globals.css.
           className="hero-photo h-full w-full object-cover"
         />
-        {/* Flat tint, kept light — the photograph is the subject here, not a
-            texture, so the wash has to leave the room readable. */}
-        <div className="absolute inset-0 bg-navy-deep/26" />
-        {/* Left ramp under the type, and a bottom edge. Standard hero
-            treatment: the type is bottom-left, so that is where the contrast
-            is built. */}
-        <div className="absolute inset-0 bg-gradient-to-r from-navy-deep/72 via-navy-deep/28 to-transparent" />
-        <div className="absolute inset-x-0 bottom-0 h-[55%] bg-gradient-to-t from-navy-deep/90 to-transparent" />
-        {/* Top edge, seating the transparent header. */}
-        <div className="absolute inset-x-0 top-0 h-52 bg-gradient-to-b from-navy-deep/80 to-transparent" />
+        {/*
+          The wash, ported from GHP's .hero-bg::after — a single 105deg ramp
+          rather than the three stacked overlays this had before:
+
+            linear-gradient(105deg, .78 → .55 @35% → .18 @65% → brand @100%)
+
+          105deg (not 90) tilts the dark corner up to where the copy actually
+          starts, and the faint brand tint at the far end stops the bright side
+          of the photograph reading as a blown-out hole. Navy here rather than
+          their near-black, so it stays this site's palette.
+        */}
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage:
+              "linear-gradient(105deg, rgba(4,27,44,0.80) 0%, rgba(4,27,44,0.56) 35%, rgba(4,27,44,0.20) 65%, rgba(0,166,224,0.10) 100%)",
+          }}
+        />
+        {/* Kept from before, and still earning it: the header has to stay
+            legible over whatever photograph this becomes. */}
+        <div className="absolute inset-x-0 top-0 h-52 bg-gradient-to-b from-navy-deep/70 to-transparent" />
       </div>
 
-      {/* Equal padding top and bottom, so `items-center` actually centres
-          rather than centring a lopsided box. 112px is also the floor that
-          keeps the badge clear of the fixed header (78px) when a short
-          viewport squeezes the section down to its content height. */}
-      <div className="wrap relative w-full py-28 md:py-32">
-        {/*
-          Bottom-left, on the same left edge as every other section on the
-          site. An earlier version pushed this into a right-hand column to keep
-          it clear of the figures in a previous photograph; that solved the
-          overlap and created a worse problem — a block of type floating in the
-          middle of the frame, aligned to nothing.
-        */}
-        {/* No max-width on the block itself — the headline runs the full
-            measure. The paragraph and the buttons set their own. */}
-        <div>
-          {/* Pill, not a rectangle — the header CTA is a pill, so a squared
-              badge two inches below it read as a different design system. */}
-          <Reveal className="mb-7">
-            <span className="mi inline-flex items-center gap-2.5 rounded-full border border-white/30 bg-white/[0.13] px-4 py-2 backdrop-blur-md">
+      {/*
+        GHP .hero-inner: 140px top / 80px bottom on desktop, 120/70 below
+        980px. Asymmetric on purpose — the section is still flex-centred, but
+        the extra weight up top is what clears the fixed header without the
+        content drifting to the middle of the frame.
+      */}
+      <div className="wrap relative w-full pb-[70px] pt-[120px] lg:pb-20 lg:pt-[140px]">
+        {/* GHP .hero-content: a 600px column. Everything below sits inside it,
+            so the headline wraps where the reference wraps. */}
+        <div className="max-w-[600px]">
+          <Reveal className="mb-6">
+            <span className="hero-tag">
               <span className="relative flex h-1.5 w-1.5">
                 <span className="ping absolute inline-flex h-full w-full rounded-full bg-[var(--aqua-bright)] opacity-70" />
-                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[var(--aqua-bright)]" />
+                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[var(--aqua-bright)] shadow-[0_0_8px_var(--aqua-bright)]" />
               </span>
               Same-day call-outs available
             </span>
           </Reveal>
 
           {/*
-            Two lines, and "PLUMBING & DRAINAGE" is never one of the places it
-            breaks — hence the nowrap.
-
-            The SIZE is unchanged — the block just runs the full measure now
-            instead of being trapped in a 600px column, which is all it needed
-            to fit on one line. At the 58px cap the long line measures about
-            616px against a 1168px container, so there is plenty of room.
-
-            The vw factor went 5.6 to 8 to lift the phone size. It is doing the
-            work a flat floor used to: at 5.6vw a 375px phone fell back to the
-            26px minimum, which was set by the WORST case (a 320px screen) and
-            so left the common case smaller than it needed to be. At 8vw the
-            size tracks the viewport all the way down — about 30px at 375px,
-            25.6px at 320px — and the long line stays inside the container at
-            every width, with roughly 5% to spare at the tightest.
-
-            The 58px ceiling is unchanged; it is simply reached at 725px now
-            rather than at 1036px.
+            SENTENCE CASE at weight 800 — the one big departure from the rest
+            of this site, and the change that does most of the work. Uppercase
+            at 600 with heavy negative tracking reads as an engineering
+            drawing; this reads as a person talking. Sizing is GHP's
+            clamp(2.6rem, 5vw, 3.6rem) converted to px.
           */}
-          <h1 className="dsp text-[clamp(22px,8vw,58px)]">
+          <h1 className="hero-h1 mb-[18px]">
             <Reveal variant="mask">
               <span>Gold Coast</span>
             </Reveal>
@@ -104,7 +102,7 @@ export function Hero() {
           </h1>
 
           <Reveal delay={260}>
-            <p className="bd-lg mt-8 max-w-[520px] text-white/72">
+            <p className="hero-sub mb-8 max-w-[520px]">
               Blocked drains, hot water, leaks and renovations — from Palm Beach
               to Helensvale. {yearsTrading()} years trading, no call-out fee, and a
               lifetime warranty on every job we do.
@@ -112,74 +110,64 @@ export function Hero() {
           </Reveal>
 
           {/*
-            The buttons share the CARD GRID below them: same max-width, same
-            two columns, same gap. Left as a flex row with intrinsic widths
-            they came out two different sizes, neither of which lined up with
-            anything underneath — a phone number is shorter than "Get a free
-            quote", so the pair sat at a ragged edge above a tidy grid.
-
-            Now button one sits over card one and button two over card two, at
-            identical widths. From lg the cards go to four columns and the
-            buttons go back to their natural size, because a 375px-wide pill is
-            not a button, it is a banner.
+            GHP .hero-btns is a plain flex row at 10px. The two-column grid on
+            phones is kept from the previous pass: it lines the buttons up with
+            the cards below, which the reference does not bother doing and
+            which looked wrong here once the cards existed.
           */}
-          <Reveal
-            delay={340}
-            className="mt-9 grid max-w-[560px] grid-cols-2 gap-2.5 lg:flex lg:max-w-none lg:gap-3"
-          >
-            <a href={site.phoneHref} className="pill !px-3 !py-3.5 sm:!px-6">
+          <Reveal delay={340} className="grid grid-cols-2 gap-2.5 lg:flex lg:gap-2.5">
+            {/* Below sm the pills share a 163px grid cell, which will not take
+                the full 15.2px label — the phone number and "Get a free quote"
+                both overflowed. Font and padding step down, and the secondary
+                drops to its short label rather than being clipped. */}
+            <a href={site.phoneHref} className="pill !px-3 !text-[13.6px] sm:!px-[30px] sm:!text-[15.2px]">
               <Phone size={15} />
               {site.phone}
             </a>
-            <QuoteLink className="pill pill-ghost !px-3 !py-3.5 sm:!px-6">
-              Get a free quote
+            <QuoteLink className="pill pill-ghost !px-3 !text-[13.6px] sm:!px-[30px] sm:!text-[15.2px]">
+              <span className="sm:hidden">Free quote</span>
+              <span className="hidden sm:inline">Get a free quote</span>
               <Arrow size={14} />
             </QuoteLink>
           </Reveal>
 
-          {/*
-            The four proof points, as a card grid.
+          {/* GHP .hero-ph — a quiet third action under the buttons, underlined
+              rather than boxed so it does not compete with them. */}
+          <Reveal delay={380} className="mt-7">
+            <Link
+              href="/gallery/"
+              className="text-[14px] text-white/70 underline decoration-white/40 underline-offset-[3px] transition-colors hover:text-white"
+            >
+              See the work we have done nearby →
+            </Link>
+          </Reveal>
 
-            This replaces a single wide, thin review pill that never sat well —
-            2x2 on a phone, 4 across on a desktop, every card the same height.
-            It is the pattern from the Prime Group hero, and it works for the
-            same reason: an even grid reads as deliberate where one stretched
-            capsule reads as leftover space.
+        </div>
 
-            It also lets the home page drop the separate numbers band further
-            down, which was repeating three of these four figures verbatim.
-          */}
-          {/* auto-rows-fr, so the row whose label wraps does not end up taller
-              than the row whose label does not. Shortening the labels got the
-              cards within a row matching; this is what matches the rows to
-              each other. */}
-          <Reveal delay={420} className="mt-9 grid max-w-[560px] auto-rows-fr grid-cols-2 gap-2.5 lg:max-w-[760px] lg:grid-cols-4">
+        {/*
+          The cards sit OUTSIDE the 600px content column, which is where GHP
+          has them: .hero-cards is a sibling of .hero-content inside .ctr, not
+          a child of it. Nested inside, four cards had to share 600px and every
+          label wrapped to three lines.
+        */}
+          <Reveal delay={420} className="mt-9 grid auto-rows-fr grid-cols-2 gap-2.5 lg:flex">
             {[
-              /* Labels are kept to two words. At this card width anything
-                 longer wrapped to a second line, and because only some of them
-                 wrapped, the rows came out different heights — which is the
-                 exact unevenness the grid was brought in to fix. The Google
-                 mark already says "Google", so the first label does not. */
-              { mark: <Google size={20} />, value: site.reviews.rating, label: `${site.reviews.count}+ reviews` },
-              { mark: <Spanner size={19} />, value: "25+", label: "Years trading" },
-              { mark: <Shield size={19} />, value: "Lifetime", label: "Warranty" },
-              { mark: <Tag size={19} />, value: "$0", label: "Call-out fee" },
+              { mark: <Google size={22} />, value: site.reviews.rating, label: `${site.reviews.count}+ Google reviews` },
+              { mark: <Spanner size={21} />, value: "25+", label: "Years experience" },
+              { mark: <Shield size={21} />, value: "Lifetime", label: "Workmanship warranty" },
+              { mark: <Tag size={21} />, value: "$0", label: "Call-out fee, ever" },
             ].map((s) => (
-              <div
-                key={s.label}
-                className="flex items-center gap-3 rounded-2xl border border-white/24 bg-white/[0.13] px-3.5 py-3 backdrop-blur-md"
-              >
-                <span className="grid h-9 w-9 flex-none place-items-center rounded-xl bg-white/[0.18] text-[var(--aqua-bright)]">
+              <div key={s.label} className="hero-card lg:flex-1">
+                <span className="grid h-7 w-7 flex-none place-items-center text-white">
                   {s.mark}
                 </span>
                 <span className="min-w-0">
-                  <span className="num block text-[17px] text-white">{s.value}</span>
-                  <span className="mi mt-1 block leading-tight text-white/55">{s.label}</span>
+                  <span className="hero-card-val block">{s.value}</span>
+                  <span className="hero-card-label mt-1 block">{s.label}</span>
                 </span>
               </div>
-            ))}
-          </Reveal>
-        </div>
+          ))}
+        </Reveal>
       </div>
     </section>
   );

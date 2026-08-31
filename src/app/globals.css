@@ -268,6 +268,113 @@ body {
 }
 
 /*
+ * ── THE GEELONG HEAT PUMPS HERO SPEC ────────────────────────────────────
+ *
+ * Ported value-for-value from geelong-heat-pumps/assets/site.css, because that
+ * hero is the one being matched. Its rem figures are converted to px here so
+ * they are not silently rescaled by a different root size:
+ *
+ *   .hero h1        clamp(2.6rem, 5vw, 3.6rem)  →  clamp(41.6px, 5vw, 57.6px)
+ *   .hero-sub       1.05rem / 1.7               →  16.8px
+ *   .hero-tag       0.76rem / 600               →  12.2px
+ *   .hg-val         1.15rem / 800               →  18.4px
+ *   .hg-label       0.65rem / 500               →  10.4px
+ *   .btn-p          15px 30px / 0.95rem / 700   →  15.2px
+ *   .nav-cta        9px 22px / 0.84rem / 700    →  13.4px
+ *   .nav-l a        0.87rem / 600               →  13.9px
+ *   .hero-inner     140px 0 80px  (120/70 ≤980)
+ *   .hero-content   max-width 600px
+ *
+ * The headline is the big departure from the rest of this site: SENTENCE CASE
+ * at weight 800, not uppercase at 600. That is what makes the reference read
+ * as friendly rather than as an engineering drawing, and it is the single
+ * change that most affects the impression.
+ */
+.hero-h1 {
+  /*
+   * GHP's ceiling (3.6rem) kept exactly; the floor and the vw factor are not.
+   * Theirs is clamp(2.6rem, 5vw, 3.6rem), which suits "Cut your hot water /
+   * bills by up to 80%" broken with a <br>. This headline keeps
+   * "plumbing & drainage" on one unbroken line, and at their 41.6px floor that
+   * line measured 408px against a 335px phone — clipped mid-word. 8vw with a
+   * 26px floor still reaches the same 57.6px ceiling, just by 720px instead of
+   * 1152px, and fits the long line all the way down to 320px.
+   */
+  font-size: clamp(26px, 8vw, 57.6px);
+  line-height: 1.06;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  color: #fff;
+}
+
+.hero-sub {
+  font-size: 16.8px;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.hero-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #fff;
+  padding: 6px 16px;
+  border-radius: 50px;
+  font-size: 12.2px;
+  font-weight: 600;
+}
+
+/* The glass stat card. flex-1 across four on desktop, two-up on a phone. */
+.hero-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 18px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px) saturate(1.5);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  transition:
+    background-color 0.3s var(--ease),
+    transform 0.3s var(--ease);
+}
+
+.hero-card:hover {
+  background: rgba(255, 255, 255, 0.16);
+  transform: translateY(-2px);
+}
+
+.hero-card-val {
+  font-size: 18.4px;
+  font-weight: 800;
+  line-height: 1;
+  color: #fff;
+  letter-spacing: -0.02em;
+}
+
+.hero-card-label {
+  font-size: 10.4px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.35;
+}
+
+/* Nav links: sentence case at 13.9px/600, not 11px uppercase micro-type. */
+.navlink {
+  font-size: 13.9px;
+  font-weight: 600;
+  letter-spacing: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 0;
+  transition: color 0.2s var(--ease);
+}
+
+/*
  * The pill CTA, taken from the MJB Electrical header.
  *
  * Two things make it read as a button rather than as a coloured rectangle: the
@@ -280,13 +387,15 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 9px;
+  /* GHP .btn-p: 15px 30px, 0.95rem, weight 700, gap 6px, sentence case.
+     Uppercase micro-type at 11px was making these read as system chrome
+     rather than as the two things the page most wants pressed. */
+  gap: 8px;
   border-radius: 999px;
-  padding: 11px 22px;
-  font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: var(--track-micro);
+  padding: 15px 30px;
+  font-size: 15.2px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
   white-space: nowrap;
   background: var(--aqua);
   color: #fff;
@@ -313,6 +422,13 @@ body {
 
 .pill:active {
   transform: translateY(0);
+}
+
+/* GHP .nav-cta — the header sits a size down from the hero buttons. */
+.pill-sm {
+  padding: 9px 22px;
+  font-size: 13.4px;
+  gap: 7px;
 }
 
 /*
