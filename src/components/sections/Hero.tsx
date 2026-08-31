@@ -119,30 +119,27 @@ export function Hero() {
           </Reveal>
 
           {/*
-            The rating, promoted from a hairline caption to a card.
+            The rating.
 
-            It was a 22px mark, 13px stars and one line of 11px micro-type
-            under a divider — technically present, and completely ignorable.
-            For a trade, 205 five-star reviews is the single strongest thing on
-            the page, so it now gets a frosted panel of its own, a 34px Google
-            mark, 19px stars and the score set at display size.
+            ONE ROW, not two. Stacking the stars above the caption made this
+            78px tall against 49px buttons — half again the height of the
+            primary call-to-action, which is the wrong thing to be the biggest
+            control in the hero. Laid out in a single line it sits at 50px,
+            level with the buttons, and is still far louder than the 22px mark
+            and 11px caption it replaced.
           */}
-          <Reveal delay={420} className="mt-11">
-            <div className="inline-flex items-center gap-4 rounded-2xl border border-white/18 bg-white/[0.07] px-5 py-4 backdrop-blur-md sm:gap-5 sm:px-6">
-              <Google size={34} />
-              <div>
-                <div className="flex items-center gap-2.5">
-                  <span className="stars flex gap-1">
-                    {Array.from({ length: 5 }, (_, i) => (
-                      <Star key={i} size={19} />
-                    ))}
-                  </span>
-                  <span className="num text-[22px] text-white">{site.reviews.rating}</span>
-                </div>
-                <div className="mi mt-2 text-white/60">
-                  From {site.reviews.count}+ Google reviews
-                </div>
-              </div>
+          <Reveal delay={420} className="mt-10">
+            <div className="inline-flex flex-wrap items-center gap-x-3 gap-y-1 rounded-full border border-white/18 bg-white/[0.08] px-5 py-3 backdrop-blur-md">
+              <Google size={22} />
+              <span className="stars flex gap-0.5">
+                {Array.from({ length: 5 }, (_, i) => (
+                  <Star key={i} size={15} />
+                ))}
+              </span>
+              <span className="num text-[17px] text-white">{site.reviews.rating}</span>
+              <span className="mi text-white/60">
+                from {site.reviews.count}+ Google reviews
+              </span>
             </div>
           </Reveal>
         </div>

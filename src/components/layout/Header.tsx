@@ -82,8 +82,25 @@ export function Header() {
           light ? "frost" : "on-dark border-b border-transparent"
         }`}
       >
+        {/*
+          The header's own scrim, for the transparent state.
+
+          Legibility here used to depend on the hero underneath happening to be
+          dark at the top. That is not a property a header should have: swap in
+          a photograph of a white-tiled bathroom and the whole bar becomes white
+          type on near-white. This gradient belongs to the header, so it is
+          correct over any hero the page is ever given. It fades out as the
+          frosted panel fades in.
+        */}
         <div
-          className={`wrap flex items-center justify-between gap-6 transition-[height] duration-400 ${
+          aria-hidden
+          className={`pointer-events-none absolute inset-x-0 top-0 h-[190%] bg-gradient-to-b from-black/72 via-black/34 to-transparent transition-opacity duration-400 ${
+            light ? "opacity-0" : "opacity-100"
+          }`}
+        />
+
+        <div
+          className={`wrap relative flex items-center justify-between gap-6 transition-[height] duration-400 ${
             scrolled ? "h-[64px]" : "h-[78px]"
           }`}
         >
