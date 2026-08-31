@@ -64,16 +64,13 @@ export function Hero() {
         <div>
           {/* Pill, not a rectangle — the header CTA is a pill, so a squared
               badge two inches below it read as a different design system. */}
-          <Reveal className="mb-7 flex flex-wrap items-center gap-x-4 gap-y-2.5">
-            <span className="mi flex items-center gap-2.5 rounded-full border border-white/20 bg-white/[0.07] px-4 py-2 backdrop-blur-md">
+          <Reveal className="mb-7">
+            <span className="mi inline-flex items-center gap-2.5 rounded-full border border-white/20 bg-white/[0.07] px-4 py-2 backdrop-blur-md">
               <span className="relative flex h-1.5 w-1.5">
                 <span className="ping absolute inline-flex h-full w-full rounded-full bg-[var(--aqua-bright)] opacity-70" />
                 <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[var(--aqua-bright)]" />
               </span>
               Same-day call-outs available
-            </span>
-            <span className="mi text-white/45">
-              Est. {site.establishedYear} · Robina
             </span>
           </Reveal>
 
