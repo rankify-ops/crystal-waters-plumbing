@@ -60,8 +60,17 @@ export function Footer() {
 
       {/* ── Sitemap ─────────────────────────────────────────────────── */}
       <div className="wrap py-16 md:py-20">
+        {/*
+          3 / 4 / 3 / 2, not 4 / 3 / 2 / 3.
+
+          The contact column holds a 35-character email address, and at the old
+          width it overflowed by roughly one character — which `break-all` then
+          "solved" by hyphenating it as "…com.a / u". Giving that column the
+          extra twelfth lets the address sit on one line, which is the only
+          acceptable way to print an email address.
+        */}
         <div className="grid gap-12 md:grid-cols-12">
-          <div className="md:col-span-4">
+          <div className="md:col-span-3">
             {/* The generated dark-ground variant, not a CSS filter — see
                 scripts/images.mjs. */}
             {/* eslint-disable-next-line @next/next/no-img-element -- the export
@@ -71,7 +80,7 @@ export function Footer() {
               alt={site.legalName}
               width={190}
               height={95}
-              className="h-12 w-auto"
+              className="h-[74px] w-auto"
             />
             <p className="bd-sm mt-6 max-w-[320px]">
               Your local community plumbing and drainage specialist, based in
@@ -88,7 +97,7 @@ export function Footer() {
             </a>
           </div>
 
-          <div className="md:col-span-3">
+          <div className="md:col-span-4">
             <h3 className="mi mb-6" style={{ color: "var(--aqua-bright)" }}>
               Contact
             </h3>
@@ -102,7 +111,7 @@ export function Footer() {
               <li>
                 <a href={site.emailHref} className="flex items-start gap-3 transition-colors hover:text-[var(--aqua-bright)]">
                   <Mail size={15} className="mt-0.5 shrink-0 opacity-60" />
-                  <span className="bd-sm break-all">{site.email}</span>
+                  <span className="bd-sm">{site.email}</span>
                 </a>
               </li>
               <li className="flex items-start gap-3">
@@ -112,7 +121,7 @@ export function Footer() {
             </ul>
           </div>
 
-          <div className="md:col-span-2">
+          <div className="md:col-span-3">
             <h3 className="mi mb-6" style={{ color: "var(--aqua-bright)" }}>
               Services
             </h3>
@@ -132,7 +141,7 @@ export function Footer() {
             </ul>
           </div>
 
-          <div className="md:col-span-3">
+          <div className="md:col-span-2">
             <h3 className="mi mb-6" style={{ color: "var(--aqua-bright)" }}>
               Navigation
             </h3>

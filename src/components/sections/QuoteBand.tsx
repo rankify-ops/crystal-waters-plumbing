@@ -64,7 +64,7 @@ export function QuoteBand({
                   <span className="mi block" style={{ color: "var(--ink-3)" }}>
                     Email us
                   </span>
-                  <span className="bd-sm block break-all text-white transition-colors group-hover:text-[var(--aqua-bright)]">
+                  <span className="bd-sm block text-white transition-colors group-hover:text-[var(--aqua-bright)]">
                     {site.email}
                   </span>
                 </span>

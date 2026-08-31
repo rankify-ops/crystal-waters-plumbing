@@ -257,7 +257,7 @@ export function Header() {
             <div className="mt-7 flex flex-col gap-3 border-t border-white/12 pt-6">
               <a href={site.emailHref} className="mi flex items-center gap-2.5 text-white/55 transition-colors hover:text-white">
                 <Mail size={14} />
-                <span className="break-all">{site.email}</span>
+                <span>{site.email}</span>
               </a>
               <span className="mi flex items-center gap-2.5 text-white/55">
                 <Pin size={14} />

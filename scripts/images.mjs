@@ -16,7 +16,7 @@ mkdirSync(OUT, { recursive: true });
 
 // [source, slug, treatment]
 const PHOTOS = [
-  // Hero + section photography
+  // Hero + section photography.
   ["Untitled-design-32.jpg", "hero-night-callout"],
   ["Untitled-design-25.jpg", "team-vans"],
   ["Untitled-design-33.jpg", "sink-and-drain"],
@@ -64,22 +64,47 @@ const PHOTOS = [
 const WIDTHS = [1600, 800];
 
 /*
- * The hero photograph, upscaled on purpose.
+ * Deliberate upscales, by slug: [wide, narrow].
  *
- * Untitled-design-25.jpg is the shot the client wants leading the site — the
- * two of them in hi-vis between the Crystal Waters and EIC vans — but the
- * media library only has it at 995x664. A full-bleed hero on a desktop needs
- * roughly twice that, and the alternative to upscaling here is letting the
- * browser do it, which uses a cheaper filter and no sharpening.
- *
- * Lanczos3 with a light unsharp pass afterwards holds the van lettering and
- * the roof edges together far better than a bilinear stretch. It is still a 2x
- * upscale and it will not survive close inspection — a higher-resolution
- * original is the real fix, and is on the list for the client.
+ * Empty, and that is the good outcome. It existed to prop up a 995x664 shot
+ * that was leading the page; the hero is now Lee.jpg at 2048x1536, which is
+ * larger than anything the layout asks for. Kept as a hook because the rest of
+ * this library is phone photography and the next hero may not be so lucky.
  */
-const UPSCALED = {
-  "team-vans": [1920, 1100],
-};
+const UPSCALED = {};
+
+/*
+ * THE HERO, PRE-CROPPED TO THE HERO'S OWN RATIO
+ *
+ * Lee.jpg — the two of them beside the branded van — is 2048x1536, a 4:3
+ * frame. A full-bleed hero is roughly 2:1, so `object-fit: cover` throws away
+ * a THIRD of its height, and crucially the amount it throws away depends on
+ * the viewport's ratio. That is what made this unfixable by tuning
+ * `object-position`: a value that framed both faces neatly at 1440x860 sliced
+ * their heads off under the header at 1920x1080, because the same percentage
+ * of a different crop is a different part of the picture.
+ *
+ * So the framing is decided ONCE, here, at 2.13:1 — a shade wider than any
+ * hero the layout produces. The browser is then left with a few percent of
+ * horizontal crop to do and nothing else, and the composition is identical on
+ * every screen.
+ *
+ * top: 300 is chosen so their heads land at about 15% of the frame: below the
+ * fixed header, and above the headline, at every viewport rather than at one.
+ */
+await (async () => {
+  const src = "assets-raw/Lee.jpg";
+  const crop = { left: 0, top: 300, width: 2048, height: 961 };
+  for (const w of WIDTHS) {
+    await sharp(src)
+      .rotate()
+      .extract(crop)
+      .resize(w, null, { withoutEnlargement: true, kernel: "lanczos3" })
+      .webp({ quality: 82 })
+      .toFile(`${OUT}/hero-team-van-${w}.webp`);
+  }
+  console.log("hero  hero-team-van (pre-cropped to 2.13:1)");
+})();
 
 const manifest = {};
 

@@ -25,8 +25,8 @@ export function Hero() {
     <section className="on-dark relative min-h-[86vh] md:min-h-[92vh] overflow-hidden bg-navy-deep flex items-center">
       <div className="absolute inset-0">
         <Photo
-          name="team-vans"
-          alt="Nick and the Crystal Waters team in hi-vis between the Crystal Waters and EIC Electrical vans"
+          name="hero-team-van"
+          alt="The Crystal Waters team standing beside the branded Crystal Waters Plumbing &amp; Drainage van"
           sizes="100vw"
           priority
           // .hero-photo carries the crop, which has to differ between the
@@ -40,7 +40,10 @@ export function Hero() {
         {/* Left ramp under the type, and a bottom edge. Standard hero
             treatment: the type is bottom-left, so that is where the contrast
             is built. */}
-        <div className="absolute inset-0 bg-gradient-to-r from-navy-deep/88 via-navy-deep/40 to-transparent" />
+        {/* Eased back from /88 — the two of them stand inside this ramp, and
+            at full strength it turned them into silhouettes. The bottom scrim
+            below carries most of the contrast for the copy instead. */}
+        <div className="absolute inset-0 bg-gradient-to-r from-navy-deep/72 via-navy-deep/28 to-transparent" />
         <div className="absolute inset-x-0 bottom-0 h-[55%] bg-gradient-to-t from-navy-deep/90 to-transparent" />
         {/* Top edge, seating the transparent header. */}
         <div className="absolute inset-x-0 top-0 h-52 bg-gradient-to-b from-navy-deep/80 to-transparent" />
