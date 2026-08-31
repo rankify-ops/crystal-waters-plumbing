@@ -315,13 +315,25 @@ body {
   transform: translateY(0);
 }
 
-/* Ghost pill — the phone number in the mobile drawer, and the secondary CTA
-   wherever two pills sit together. */
+/*
+ * Ghost pill — the secondary CTA wherever two pills sit together.
+ *
+ * NOT transparent. It used to be, and on a photographic hero that meant a
+ * 1px white border at 24% alpha and nothing else: the button effectively
+ * disappeared into whatever happened to be behind it, and the pair read as one
+ * button plus an outline someone forgot to finish.
+ *
+ * It now carries a real frosted fill. That gives it a footprint of its own
+ * while keeping it clearly second to the aqua primary — the hierarchy comes
+ * from colour and glow, which the primary has and this does not, rather than
+ * from one of them being invisible.
+ */
 .pill-ghost {
-  background: transparent;
+  background: rgba(6, 42, 68, 0.05);
   border-color: var(--rule-dark);
   color: var(--ink);
   box-shadow: none;
+  backdrop-filter: blur(12px);
 }
 
 .pill-ghost:hover {
@@ -329,11 +341,12 @@ body {
   border-color: var(--ink);
   color: var(--paper);
   transform: translateY(-1px);
-  box-shadow: none;
+  box-shadow: 0 8px 20px rgba(6, 42, 68, 0.24);
 }
 
 .on-dark .pill-ghost {
-  border-color: rgba(255, 255, 255, 0.24);
+  background: rgba(255, 255, 255, 0.17);
+  border-color: rgba(255, 255, 255, 0.38);
   color: #fff;
 }
 
@@ -341,6 +354,7 @@ body {
   background: #fff;
   border-color: #fff;
   color: var(--navy);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.28);
 }
 
 /*
@@ -588,6 +602,15 @@ body {
   background: var(--navy);
   border-color: var(--navy);
   color: #fff;
+}
+
+/* Same reasoning as .pill-ghost above: an outlined button on a photograph is
+   an invisible button. Inside a dark scope it gets a frosted fill so it has a
+   shape of its own. */
+.on-dark .btn {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.32);
+  backdrop-filter: blur(12px);
 }
 
 .on-dark .btn:hover {
