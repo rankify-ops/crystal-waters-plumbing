@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { QuoteLink } from "@/components/ui/QuoteLink";
 import { useEffect, useState } from "react";
 import { site } from "@/content/site";
 import { Phone } from "@/components/ui/Icons";
@@ -53,12 +53,9 @@ export function CallBar() {
           <Phone size={14} />
           {site.phone}
         </a>
-        <Link
-          href="/contact/#quote"
-          className="mi flex items-center justify-center gap-2 bg-navy py-4 text-white"
-        >
+        <QuoteLink className="mi flex items-center justify-center gap-2 bg-navy py-4 text-white">
           Free quote
-        </Link>
+        </QuoteLink>
       </div>
     </div>
   );

@@ -37,10 +37,13 @@ export function QuoteBand({
               <h2 className="dsp text-[clamp(30px,5vw,52px)]">{heading}</h2>
             </Reveal>
             <Reveal delay={120}>
+              {/* The form next to this collapses to a plain enquiry when it
+                  already knows the service (see QuoteForm's compact mode), so
+                  this must stop promising four questions there. */}
               <p className="bd-lg mt-7 max-w-[420px]">
-                Answer four quick questions and we will call you back with a
-                price. No call-out fee, no obligation, and nothing starts until
-                you say so.
+                {presetJob
+                  ? "Leave your details and we will call you back with a price. No call-out fee, no obligation, and nothing starts until you say so."
+                  : "Answer four quick questions and we will call you back with a price. No call-out fee, no obligation, and nothing starts until you say so."}
               </p>
             </Reveal>
 

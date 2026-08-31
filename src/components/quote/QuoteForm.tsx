@@ -85,10 +85,23 @@ export function QuoteForm({
   presetJob?: string;
   className?: string;
 }) {
-  // A preset job means question one is already answered by the click that got
-  // the visitor here, so the form opens on question two. Back still returns to
-  // question one, where their answer is shown selected and can be changed.
-  const [step, setStep] = useState(presetJob ? 1 : 0);
+  /*
+   * COMPACT MODE.
+   *
+   * On a service page the visitor has already told us what the job is — that
+   * is what clicking through to /services/water-leaks/ means. Asking them to
+   * pick "leak or burst pipe" out of a list, then answer two more questions
+   * before they can type a phone number, is making them fill in a form to
+   * repeat something they have already said.
+   *
+   * So a preset job collapses the whole questionnaire to the details panel and
+   * the form becomes a plain enquiry about that one service. The four-question
+   * flow is for the pages where we genuinely do not know yet: home, contact,
+   * gallery, about.
+   */
+  const compact = Boolean(presetJob);
+
+  const [step, setStep] = useState(compact ? STEPS.length - 1 : 0);
   const [answers, setAnswers] = useState<Record<string, string>>(
     presetJob ? { job: presetJob } : {}
   );
@@ -163,8 +176,8 @@ export function QuoteForm({
           email: fields.email || "not supplied",
           Suburb: fields.suburb,
           Job: answers.job || "Not specified",
-          Urgency: answers.urgency || "Not specified",
-          Property: answers.property || "Not specified",
+          Urgency: answers.urgency || (compact ? "Not asked (service page enquiry)" : "Not specified"),
+          Property: answers.property || (compact ? "Not asked (service page enquiry)" : "Not specified"),
           Details: fields.message || "—",
           "Source page": typeof window !== "undefined" ? window.location.href : "",
         }),
@@ -215,23 +228,39 @@ export function QuoteForm({
 
   /* ── Form ──────────────────────────────────────────────────────────── */
   return (
-    <div className={`rounded-3xl border border-[var(--rule)] bg-paper p-6 shadow-[0_18px_50px_rgba(6,42,68,0.10)] sm:p-8 md:p-10 ${className}`} id="quote">
+    <div
+      className={`rounded-3xl border border-[var(--rule)] bg-paper p-6 shadow-[0_18px_50px_rgba(6,42,68,0.10)] sm:p-8 md:p-10 ${className}`}
+      id="quote"
+      // Focusable so QuoteLink can move the keyboard as well as the viewport.
+      tabIndex={-1}
+    >
       <div className="mb-1 flex items-baseline justify-between gap-4">
-        <h3 className="dsp-sm text-[21px] md:text-[24px]">Get a free quote</h3>
-        <span className="mi shrink-0" style={{ color: "var(--ink-3)" }}>
-          Step {step + 1} / {STEPS.length}
-        </span>
+        <h3 className="dsp-sm text-[21px] md:text-[24px]">
+          {compact ? `Ask about ${presetJob!.toLowerCase()}` : "Get a free quote"}
+        </h3>
+        {!compact && (
+          <span className="mi shrink-0" style={{ color: "var(--ink-3)" }}>
+            Step {step + 1} / {STEPS.length}
+          </span>
+        )}
       </div>
-      <p className="bd-sm mb-6">Four quick questions. No call-out fee, no obligation.</p>
+      <p className="bd-sm mb-6">
+        {compact
+          ? "Leave your details and we will call you back with a price. No call-out fee, no obligation."
+          : "Four quick questions. No call-out fee, no obligation."}
+      </p>
 
       {/* Progress. One continuous bar rather than four pips — pips imply the
-          steps are equal in effort, and the last one is not. */}
-      <div className="mb-8 h-[4px] w-full overflow-hidden rounded-full bg-[var(--rule)]">
-        <div
-          className="h-full bg-aqua transition-[width] duration-500"
-          style={{ width: `${Math.max(progress, 0.06) * 100}%` }}
-        />
-      </div>
+          steps are equal in effort, and the last one is not. Hidden in compact
+          mode, where there is only ever one panel. */}
+      {!compact && (
+        <div className="mb-8 h-[4px] w-full overflow-hidden rounded-full bg-[var(--rule)]">
+          <div
+            className="h-full bg-aqua transition-[width] duration-500"
+            style={{ width: `${Math.max(progress, 0.06) * 100}%` }}
+          />
+        </div>
+      )}
 
       <div ref={panelRef} tabIndex={-1} className="outline-none" aria-live="polite">
         {/* Step 1 — job */}
@@ -293,7 +322,10 @@ export function QuoteForm({
 
         {/* Step 4 — details */}
         {step === 3 && (
-          <Panel heading="Where should we call you?" sub="Phone and suburb are all we really need.">
+          <Panel
+            heading="Where should we call you?"
+            sub={compact ? "Phone and suburb are all we really need." : "Phone and suburb are all we really need."}
+          >
             <form onSubmit={submit} className="grid gap-2.5">
               <Field label="Your name" value={fields.name} onChange={(v) => setFields((f) => ({ ...f, name: v }))} autoComplete="name" required />
               <Field label="Phone number" value={fields.phone} onChange={(v) => setFields((f) => ({ ...f, phone: v }))} type="tel" autoComplete="tel" required />
@@ -332,7 +364,7 @@ export function QuoteForm({
         )}
       </div>
 
-      {step > 0 && (
+      {step > 0 && !compact && (
         <button
           type="button"
           onClick={() => setStep((s) => Math.max(s - 1, 0))}

@@ -1,8 +1,8 @@
-import Link from "next/link";
 import { site, yearsTrading } from "@/content/site";
 import { Photo } from "@/components/ui/Photo";
 import { Reveal } from "@/components/ui/Reveal";
 import { Phone, Arrow, Google, Spanner, Shield, Tag } from "@/components/ui/Icons";
+import { QuoteLink } from "@/components/ui/QuoteLink";
 
 /*
  * The home hero.
@@ -119,10 +119,10 @@ export function Hero() {
               <Phone size={15} />
               {site.phone}
             </a>
-            <Link href="/contact/#quote" className="pill pill-ghost !py-3.5 !px-6">
+            <QuoteLink className="pill pill-ghost !py-3.5 !px-6">
               Get a free quote
               <Arrow size={14} />
-            </Link>
+            </QuoteLink>
           </Reveal>
 
           {/*

@@ -8,6 +8,7 @@ import { team, site, yearsTrading } from "@/content/site";
 import { Photo } from "@/components/ui/Photo";
 import { Reveal } from "@/components/ui/Reveal";
 import { Arrow } from "@/components/ui/Icons";
+import { QuoteLink } from "@/components/ui/QuoteLink";
 
 export const metadata: Metadata = {
   title: "About Us",
@@ -198,10 +199,10 @@ export default function AboutPage() {
                 </p>
               </Reveal>
               <Reveal delay={180} className="mt-9 flex flex-wrap gap-3">
-                <Link href="/contact/#quote" className="btn btn-solid">
+                <QuoteLink className="btn btn-solid">
                   Contact us
                   <Arrow size={14} />
-                </Link>
+                </QuoteLink>
                 <Link href="/gallery/" className="btn">
                   See our work
                   <Arrow size={14} />

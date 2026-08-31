@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { site, services } from "@/content/site";
 import { asset } from "@/lib/basePath";
 import { Phone, Mail, Pin, Facebook, Arrow } from "@/components/ui/Icons";
+import { QuoteLink } from "@/components/ui/QuoteLink";
 
 /*
  * One header for the whole site, modelled on the MJB Electrical bar.
@@ -186,10 +187,10 @@ export function Header() {
                 thumb reach — two of them stacked in the same view is how a site
                 starts reading as an ad. It stays on desktop, where there is no
                 call bar. */}
-            <Link href="/contact/#quote" className="pill hidden sm:inline-flex">
+            <QuoteLink className="pill hidden sm:inline-flex">
               Free quote
               <Arrow size={13} />
-            </Link>
+            </QuoteLink>
 
             <button
               type="button"
@@ -265,10 +266,10 @@ export function Header() {
                 <Phone size={15} />
                 {site.phone}
               </a>
-              <Link href="/contact/#quote" className="pill pill-ghost w-full !py-3.5">
+              <QuoteLink className="pill pill-ghost w-full !py-3.5">
                 Get a free quote
                 <Arrow size={13} />
-              </Link>
+              </QuoteLink>
             </div>
 
             <div className="mt-7 flex flex-col gap-3 border-t border-white/12 pt-6">

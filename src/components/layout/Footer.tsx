@@ -4,6 +4,7 @@ import { asset } from "@/lib/basePath";
 import { Phone, Mail, Pin, Facebook, Arrow } from "@/components/ui/Icons";
 import { Photo } from "@/components/ui/Photo";
 import { Reveal } from "@/components/ui/Reveal";
+import { QuoteLink } from "@/components/ui/QuoteLink";
 
 /*
  * The footer carries the closing CTA as well as the sitemap, because the old
@@ -49,10 +50,10 @@ export function Footer() {
                 <Phone size={15} />
                 {site.phone}
               </a>
-              <Link href="/contact/#quote" className="btn btn-solid">
+              <QuoteLink className="btn btn-solid">
                 Get a free quote
                 <Arrow size={14} />
-              </Link>
+              </QuoteLink>
             </Reveal>
           </div>
         </div>
