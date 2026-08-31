@@ -22,7 +22,7 @@ import { Phone, Arrow, Star, Google } from "@/components/ui/Icons";
  */
 export function Hero() {
   return (
-    <section className="on-dark relative min-h-[86vh] md:min-h-[92vh] overflow-hidden bg-navy-deep flex items-end">
+    <section className="on-dark relative min-h-[86vh] md:min-h-[92vh] overflow-hidden bg-navy-deep flex items-center">
       <div className="absolute inset-0">
         <Photo
           name="team-vans"
@@ -46,7 +46,11 @@ export function Hero() {
         <div className="absolute inset-x-0 top-0 h-52 bg-gradient-to-b from-navy-deep/80 to-transparent" />
       </div>
 
-      <div className="wrap relative w-full pb-14 pt-36 md:pb-20 md:pt-44">
+      {/* Equal padding top and bottom, so `items-center` actually centres
+          rather than centring a lopsided box. 112px is also the floor that
+          keeps the badge clear of the fixed header (78px) when a short
+          viewport squeezes the section down to its content height. */}
+      <div className="wrap relative w-full py-28 md:py-32">
         {/*
           Bottom-left, on the same left edge as every other section on the
           site. An earlier version pushed this into a right-hand column to keep
