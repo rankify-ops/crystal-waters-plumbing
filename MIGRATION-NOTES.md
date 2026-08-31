@@ -121,6 +121,24 @@ word** — a copy-paste that was never corrected. It now has its own copy, marke
 
 ---
 
+## The logo files
+
+The client supplied a horizontal lockup in two versions. The **light** one
+(`assets-raw/logo-lockup.png`) is now the master for the header, and it is
+better than anything croppable out of the old WordPress mark — higher
+resolution and already the right shape.
+
+The **dark** one they supplied is not used. Its "PLUMBING & DRAINAGE" was
+knocked out to white but left almost entirely transparent — 884 opaque pixels
+against 10,097 in the light version — so on navy it renders as broken letter
+fragments rather than words. It is kept as
+`assets-raw/logo-lockup-supplied-dark.png` for reference. The dark version the
+site actually uses is generated from the good light file by
+`scripts/images.mjs`, and is solid.
+
+Worth telling whoever exported it, in case the same broken file is in use
+elsewhere — on a van, on a shirt, on a business card.
+
 ## Still outstanding
 
 - **Google reviews count** — currently 205, from the old widget.

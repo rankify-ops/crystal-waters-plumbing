@@ -162,24 +162,26 @@ async function forDarkGround(buffer) {
  *
  * The full mark is 2:1 — the skyline occupies the top 55% of it, above the
  * wordmark. A header sizes a logo by HEIGHT, so at any height a header can
- * afford, the skyline eats the budget and the actual company name renders
- * about four pixels tall. It was illegible.
+ * afford, the skyline eats the budget and the company name renders about four
+ * pixels tall. It was illegible.
  *
- * So the header gets a horizontal lockup: the same file cropped to the
- * wordmark and its subtitle, which is roughly 4.5:1 and therefore sets the
- * name three times larger in the same vertical space. The full mark with the
- * skyline is kept for the footer, where there is room for it.
+ * The header therefore uses a horizontal lockup — wordmark and subtitle, no
+ * skyline, roughly 4.5:1 — which sets the name three times larger in the same
+ * vertical space. The full mark with the skyline keeps the footer, where there
+ * is room for it.
  *
- * The crop is measured, not guessed: row 248 is where saturated blue pixels
- * first appear in the trimmed source, which is the top of the "C".
+ * The lockup is a file the client supplied (assets-raw/logo-lockup.png, 1190 x
+ * 301) rather than a crop of the big mark, which is what an earlier version of
+ * this script had to do. It is both higher resolution and cleaner.
+ *
+ * They also supplied a pre-made dark-ground version. It is NOT used: its
+ * "PLUMBING & DRAINAGE" was knocked out to white but left almost entirely
+ * transparent — 884 opaque pixels against 10,097 in the light version — so it
+ * renders as broken letter fragments on navy. It is kept in assets-raw as
+ * logo-lockup-supplied-dark.png for reference. The dark version below is
+ * generated from the good light file instead, and is solid.
  */
-const { height: logoH } = await sharp(logoSrc).metadata();
-const WORDMARK_TOP = 246;
-
-const wordmark = await sharp(logoSrc)
-  .extract({ left: 0, top: WORDMARK_TOP, width: 894, height: logoH - WORDMARK_TOP })
-  .trim()
-  .toBuffer();
+const wordmark = await sharp("assets-raw/logo-lockup.png").trim().toBuffer();
 
 for (const [buf, name] of [
   [logoSrc, "logo"],

@@ -1,8 +1,9 @@
-node_modules
-.next
-out
 *.tsbuildinfo
-next-env.d.ts
 .DS_Store
-scrape/*.html
+.logo-drop
+.next
 .preview
+next-env.d.ts
+node_modules
+out
+scrape/*.html
