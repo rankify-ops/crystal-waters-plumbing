@@ -33,32 +33,32 @@ export function Hero() {
           // portrait and landscape framings — see globals.css.
           className="hero-photo h-full w-full object-cover"
         />
-        {/* Flat tint, kept light — this photograph is the subject, not a
-            texture, so the wash has to leave the two of them readable. */}
+        {/* Flat tint, kept light — the photograph is the subject here, not a
+            texture, so the wash has to leave the van and the two of them
+            readable. */}
         <div className="absolute inset-0 bg-navy-deep/26" />
-        {/* The scrim runs from the BOTTOM and from the RIGHT, which is where
-            the type now sits. The old version ramped from the left and put the
-            two of them in shadow to light a headline that was standing on top
-            of them anyway. */}
-        <div className="absolute inset-x-0 bottom-0 h-[58%] bg-gradient-to-t from-navy-deep via-navy-deep/70 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-l from-navy-deep/88 via-navy-deep/30 to-transparent" />
+        {/* Left ramp under the type, and a bottom edge. Standard hero
+            treatment: the type is bottom-left, so that is where the contrast
+            is built. */}
+        <div className="absolute inset-0 bg-gradient-to-r from-navy-deep/88 via-navy-deep/40 to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-[55%] bg-gradient-to-t from-navy-deep/90 to-transparent" />
         {/* Top edge, seating the transparent header. */}
         <div className="absolute inset-x-0 top-0 h-52 bg-gradient-to-b from-navy-deep/80 to-transparent" />
       </div>
 
       <div className="wrap relative w-full pb-14 pt-36 md:pb-20 md:pt-44">
         {/*
-          The copy sits in the RIGHT column from lg up.
+          Bottom-left, on the same left edge as every other section on the
+          site. An earlier version pushed this into a right-hand column to keep
+          it off the two figures in the photograph; that solved the overlap and
+          created a worse problem — a block of type floating in the middle of
+          the frame, aligned to nothing.
 
-          Not a stylistic choice — the photograph decides it. Nick and his mate
-          stand at 19–30% of the rendered width, and a left-hand headline runs
-          to about 66%, so the two people the client actually wants leading the
-          site were standing behind their own headline. Text right, subjects
-          left. Below lg the column is full width and the type sits under them
-          rather than beside them, which is why the bottom scrim carries the
-          contrast on a phone.
+          The overlap is handled by the crop and the ramp instead: the photo is
+          biased so the van and the two of them sit right of the text, and the
+          left ramp carries the contrast.
         */}
-        <div className="max-w-[620px] lg:ml-auto lg:max-w-[560px]">
+        <div className="max-w-[600px]">
           <Reveal className="mb-8 flex flex-wrap items-center gap-x-5 gap-y-3">
             <span className="mi flex items-center gap-2.5 border border-white/20 px-3 py-1.5">
               <span className="relative flex h-1.5 w-1.5">
