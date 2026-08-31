@@ -28,7 +28,7 @@ export function Hero() {
       <div className="absolute inset-0">
         <Photo
           name="hero-lead"
-          alt="A completed Crystal Waters bathroom — twin basins, backlit mirrors and a tiled feature wall"
+          alt="The Crystal Waters team in surf lifesaving kit beside the Crystal Waters and EIC Electrical vans"
           sizes="100vw"
           priority
           // .hero-photo carries the crop, which has to differ between the

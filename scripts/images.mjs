@@ -119,21 +119,24 @@ const UPSCALED = {};
  * kept.
  */
 await (async () => {
-  const src = "assets-raw/Untitled-design-29.jpg";
-  const crop = { left: 0, top: 60, width: 995, height: 498 };
+  const src = "assets-raw/Untitled-design-25.jpg";
+  // top: 100 puts their heads at about 22% of the frame — below the fixed
+  // header, with their feet landing on the bottom edge rather than cropped
+  // mid-shin.
+  const crop = { left: 0, top: 100, width: 995, height: 498 };
   for (const w of WIDTHS) {
     await sharp(src)
       .rotate()
       .extract(crop)
-      // 1.61x on the wide render. A tiled wall and two backlit mirrors carry an
-      // upscale far better than a face would — there is no fine detail in it
-      // for the interpolation to smear.
+      // 1.61x on the wide render, same as the shot it replaced. Lanczos plus a
+      // light unsharp pass; the van lettering is the detail that suffers first,
+      // so check that rather than the sky if this ever needs retuning.
       .resize(w, null, { kernel: "lanczos3" })
       .sharpen({ sigma: 0.7, m1: 0.4, m2: 0.9 })
       .webp({ quality: 84 })
       .toFile(`${OUT}/hero-lead-${w}.webp`);
   }
-  console.log("hero  hero-lead (Untitled-design-29.jpg, pre-cropped to 2:1)");
+  console.log("hero  hero-lead (Untitled-design-25.jpg, pre-cropped to 2:1)");
 })();
 
 const manifest = {};

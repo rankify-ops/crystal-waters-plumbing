@@ -761,37 +761,24 @@ body {
 /*
  * THE HERO CROP
  *
- * A single object-position cannot serve both ratios. The source is landscape
- * (3:2) and the subject — the van, and the two of them beside it — sits across
- * the middle of it:
- *
- *   - A desktop hero is WIDER in ratio than the photograph, so `cover` scales
- *     it by width and crops only the top and bottom. The horizontal value is
- *     inert there; the vertical is what matters, and it stays low or the crop
- *     keeps sky and loses their legs.
- *   - A phone hero is portrait, so roughly two thirds of the WIDTH is cut.
- *     Centred, the two of them fall off the left edge entirely; 28% holds them
- *     in shot next to the van.
- */
-/*
- * THE HERO CROP
- *
  * The heavy lifting happens in scripts/images.mjs, which ships this photograph
- * already cut to 2.13:1 — see the note there for why chasing it with
+ * already cut to 2:1 — see the note there for why chasing it with
  * object-position alone could not work. What is left for CSS is small:
  *
- *   - Desktop: the file is a shade wider than the hero, so `cover` trims a few
- *     percent off the sides and nothing else. Centre is correct.
+ *   - Desktop: the file is a shade wider than the hero, so `cover` trims only
+ *     a few percent off the sides. Anchored at 0% rather than centre, which
+ *     spends that trim entirely on the right edge and so nudges the two of
+ *     them a little further out from under the headline.
  *   - Phone: the hero is portrait, so two thirds of the WIDTH still goes.
- *     Centred, which keeps both basins and both mirrors in frame.
+ *     Biased left, which is what holds them in shot beside the van.
  */
 .hero-photo {
-  object-position: 50% 50%;
+  object-position: 20% 50%;
 }
 
 @media (min-width: 1024px) {
   .hero-photo {
-    object-position: 50% 50%;
+    object-position: 0% 50%;
   }
 }
 

@@ -147,7 +147,18 @@ export function Header() {
                     // Opens on hover and on keyboard focus within, so the
                     // submenu is reachable without a mouse.
                     <div className="invisible absolute left-0 top-full w-[290px] translate-y-1 opacity-0 transition-all duration-300 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100">
-                      <div className="mt-2 overflow-hidden rounded-2xl border border-[rgba(6,42,68,0.07)] bg-white/90 py-2 shadow-[0_18px_44px_rgba(6,42,68,0.16)] backdrop-blur-xl">
+                      {/*
+                        `on-light` is load-bearing, not decoration.
+
+                        While the header is transparent it carries `on-dark`,
+                        which re-points --ink at white. This dropdown is a
+                        near-white panel INSIDE that scope, so its `text-ink`
+                        links inherited white and the whole menu rendered white
+                        on white — invisible until you happened to hover the
+                        right row. `on-light` puts the ink tokens back for this
+                        subtree; see globals.css.
+                      */}
+                      <div className="on-light mt-2 overflow-hidden rounded-2xl border border-[rgba(6,42,68,0.07)] bg-white/95 py-2 shadow-[0_18px_44px_rgba(6,42,68,0.16)] backdrop-blur-xl">
                         {item.children.map((child) => (
                           <Link
                             key={child.slug}
