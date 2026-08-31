@@ -76,7 +76,25 @@ const UPSCALED = {};
 /*
  * THE HERO, PRE-CROPPED TO THE HERO'S OWN RATIO
  *
- * WHICH PHOTOGRAPH. Ethan.jpg, not Lee.jpg. Both show a team member with the
+ * WHICH PHOTOGRAPH — AND WHY IT IS NOT ONE OF THE TEAM.
+ *
+ * The whole media library was reviewed at hero aspect, including 36 images the
+ * site itself never referenced, pulled from the WordPress REST API. Every
+ * usable photograph of the team has a van in it. The four that do not are:
+ *
+ *   Untitled-design-26.jpg  Nick in a shower rough-in   600x684   2.67x upscale
+ *   Untitled-design-28.jpg  bent over a wall, face hidden         2.67x
+ *   Me.jpg                  a beach selfie in surf club gear      1.67x
+ *   Hayden.jpg              429x960, and a van in shot anyway     3.73x
+ *
+ * None survives a full-bleed hero. So the page leads on the work instead —
+ * this is the best-looking finished job in the library and the only premium
+ * interior that is natively landscape. Swap it for a proper team photograph
+ * the moment one exists; the crop machinery below does not care what it is
+ * pointed at.
+ *
+ * Superseded, kept because the reasoning still applies to that swap:
+ * Ethan.jpg, and before it Lee.jpg. Both show a team member with the
  * branded van; the difference is where the person stands. In Lee.jpg the two
  * of them are at 14–43% across, which is exactly where a left-aligned headline
  * goes — no crop could separate them, because there is nothing to their left
@@ -101,17 +119,21 @@ const UPSCALED = {};
  * kept.
  */
 await (async () => {
-  const src = "assets-raw/Ethan.jpg";
-  const crop = { left: 0, top: 220, width: 2048, height: 1024 };
+  const src = "assets-raw/Untitled-design-29.jpg";
+  const crop = { left: 0, top: 60, width: 995, height: 498 };
   for (const w of WIDTHS) {
     await sharp(src)
       .rotate()
       .extract(crop)
-      .resize(w, null, { withoutEnlargement: true, kernel: "lanczos3" })
-      .webp({ quality: 82 })
-      .toFile(`${OUT}/hero-team-van-${w}.webp`);
+      // 1.61x on the wide render. A tiled wall and two backlit mirrors carry an
+      // upscale far better than a face would — there is no fine detail in it
+      // for the interpolation to smear.
+      .resize(w, null, { kernel: "lanczos3" })
+      .sharpen({ sigma: 0.7, m1: 0.4, m2: 0.9 })
+      .webp({ quality: 84 })
+      .toFile(`${OUT}/hero-lead-${w}.webp`);
   }
-  console.log("hero  hero-team-van (Ethan.jpg, pre-cropped to 2:1)");
+  console.log("hero  hero-lead (Untitled-design-29.jpg, pre-cropped to 2:1)");
 })();
 
 const manifest = {};

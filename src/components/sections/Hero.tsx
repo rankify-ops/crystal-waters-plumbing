@@ -7,17 +7,19 @@ import { Phone, Arrow, Star, Google } from "@/components/ui/Icons";
 /*
  * The home hero.
  *
- * A full-bleed photograph of an actual night call-out — their van, their light
- * tower, their cones on somebody's driveway. The old site opened on a stock
- * hero with the headline "Your Neighborhood's Plumbing Experts: Your
- * Satisfaction, Our Guarantee", which is a sentence that could sit on any
+ * The old site opened on the headline "Your Neighborhood's Plumbing Experts:
+ * Your Satisfaction, Our Guarantee", which is a sentence that could sit on any
  * plumber's website in the country. This one says what they do and where, and
- * puts the two things people are actually deciding between — call now, or get a
- * price — in front of everything else.
+ * puts the two things people are actually deciding between — call now, or get
+ * a price — in front of everything else.
  *
- * The photograph carries a four-part wash: a flat tint, a heavy top edge that
- * seats the transparent header, a heavier bottom edge, and a left-weighted
- * ramp under the type. White type over an unwashed photo is a coin toss;
+ * WHICH PHOTOGRAPH is decided in scripts/images.mjs, and that note is worth
+ * reading before swapping it: the library has no usable wide shot of the team
+ * without a van in it, so the page currently leads on the work.
+ *
+ * The photograph carries a three-part wash: a flat tint, a left-weighted ramp
+ * under the type, and a bottom edge, plus a top edge that seats the
+ * transparent header. White type over an unwashed photo is a coin toss;
  * washing only the side the type sits on keeps the picture visible.
  */
 export function Hero() {
@@ -25,8 +27,8 @@ export function Hero() {
     <section className="on-dark relative min-h-[86vh] md:min-h-[92vh] overflow-hidden bg-navy-deep flex items-center">
       <div className="absolute inset-0">
         <Photo
-          name="hero-team-van"
-          alt="The Crystal Waters team standing beside the branded Crystal Waters Plumbing &amp; Drainage van"
+          name="hero-lead"
+          alt="A completed Crystal Waters bathroom — twin basins, backlit mirrors and a tiled feature wall"
           sizes="100vw"
           priority
           // .hero-photo carries the crop, which has to differ between the
@@ -34,15 +36,11 @@ export function Hero() {
           className="hero-photo h-full w-full object-cover"
         />
         {/* Flat tint, kept light — the photograph is the subject here, not a
-            texture, so the wash has to leave the van and the two of them
-            readable. */}
+            texture, so the wash has to leave the room readable. */}
         <div className="absolute inset-0 bg-navy-deep/26" />
         {/* Left ramp under the type, and a bottom edge. Standard hero
             treatment: the type is bottom-left, so that is where the contrast
             is built. */}
-        {/* Eased back from /88 — the two of them stand inside this ramp, and
-            at full strength it turned them into silhouettes. The bottom scrim
-            below carries most of the contrast for the copy instead. */}
         <div className="absolute inset-0 bg-gradient-to-r from-navy-deep/72 via-navy-deep/28 to-transparent" />
         <div className="absolute inset-x-0 bottom-0 h-[55%] bg-gradient-to-t from-navy-deep/90 to-transparent" />
         {/* Top edge, seating the transparent header. */}
@@ -57,13 +55,9 @@ export function Hero() {
         {/*
           Bottom-left, on the same left edge as every other section on the
           site. An earlier version pushed this into a right-hand column to keep
-          it off the two figures in the photograph; that solved the overlap and
-          created a worse problem — a block of type floating in the middle of
-          the frame, aligned to nothing.
-
-          The overlap is handled by the crop and the ramp instead: the photo is
-          biased so the van and the two of them sit right of the text, and the
-          left ramp carries the contrast.
+          it clear of the figures in a previous photograph; that solved the
+          overlap and created a worse problem — a block of type floating in the
+          middle of the frame, aligned to nothing.
         */}
         {/* No max-width on the block itself — the headline runs the full
             measure. The paragraph and the buttons set their own. */}
