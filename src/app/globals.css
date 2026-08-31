@@ -748,6 +748,32 @@ body {
   border-color: var(--aqua-bright);
 }
 
+/*
+ * THE HERO CROP
+ *
+ * A single object-position cannot serve both ratios here. The source is
+ * landscape (3:2) and the two people the shot is actually about stand at
+ * 24–33% across it:
+ *
+ *   - On a desktop hero the frame is wider than the photograph, so the crop
+ *     eats the top and bottom and barely touches the sides. 38% keeps them
+ *     clear of the right-hand text column.
+ *   - On a phone the frame is portrait, so roughly two thirds of the WIDTH is
+ *     cut. At 38% they fall off the left edge entirely; 24% is what holds them
+ *     in shot.
+ *
+ * Vertical stays low in both, or the crop keeps the sky and loses their legs.
+ */
+.hero-photo {
+  object-position: 24% 58%;
+}
+
+@media (min-width: 1024px) {
+  .hero-photo {
+    object-position: 38% 60%;
+  }
+}
+
 /* ── PHOTO FRAMES ────────────────────────────────────────────────────────
    Every photograph here is a migrated phone snap from a job site: honest, but
    inconsistent in exposure and white balance. A shared frame — slight

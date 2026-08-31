@@ -63,22 +63,44 @@ const PHOTOS = [
 
 const WIDTHS = [1600, 800];
 
+/*
+ * The hero photograph, upscaled on purpose.
+ *
+ * Untitled-design-25.jpg is the shot the client wants leading the site — the
+ * two of them in hi-vis between the Crystal Waters and EIC vans — but the
+ * media library only has it at 995x664. A full-bleed hero on a desktop needs
+ * roughly twice that, and the alternative to upscaling here is letting the
+ * browser do it, which uses a cheaper filter and no sharpening.
+ *
+ * Lanczos3 with a light unsharp pass afterwards holds the van lettering and
+ * the roof edges together far better than a bilinear stretch. It is still a 2x
+ * upscale and it will not survive close inspection — a higher-resolution
+ * original is the real fix, and is on the list for the client.
+ */
+const UPSCALED = {
+  "team-vans": [1920, 1100],
+};
+
 const manifest = {};
 
 for (const [src, slug] of PHOTOS) {
   const input = `assets-raw/${src}`;
   const meta = await sharp(input).metadata();
   manifest[slug] = { w: meta.width, h: meta.height };
-  for (const w of WIDTHS) {
-    // Never upscale — a 600px source blown to 1600 is just a bigger blur.
-    const width = Math.min(w, meta.width);
-    await sharp(input)
-      .rotate()
-      .resize(width, null, { withoutEnlargement: true })
-      .webp({ quality: 78 })
-      .toFile(`${OUT}/${slug}-${w}.webp`);
+  const upscale = UPSCALED[slug];
+
+  for (const [i, w] of WIDTHS.entries()) {
+    // Never upscale by default — a 600px source blown to 1600 is just a bigger
+    // blur. The hero is the one deliberate exception; see UPSCALED above.
+    const width = upscale ? upscale[i] : Math.min(w, meta.width);
+    const pipe = sharp(input).rotate().resize(width, null, {
+      withoutEnlargement: !upscale,
+      kernel: "lanczos3",
+    });
+    if (upscale) pipe.sharpen({ sigma: 0.7, m1: 0.4, m2: 0.9 });
+    await pipe.webp({ quality: upscale ? 84 : 78 }).toFile(`${OUT}/${slug}-${w}.webp`);
   }
-  console.log("photo", slug, `${meta.width}x${meta.height}`);
+  console.log("photo", slug, `${meta.width}x${meta.height}`, upscale ? "(upscaled)" : "");
 }
 
 /*

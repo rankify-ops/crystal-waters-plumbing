@@ -164,11 +164,11 @@ export function Header() {
               {site.phone}
             </a>
 
-            <a href={site.phoneHref} className="pill lg:hidden !px-4" aria-label={`Call ${site.phone}`}>
-              <Phone size={14} />
-              Call
-            </a>
-
+            {/* No call button here on phones. The fixed call bar at the bottom
+                of the viewport already carries one, permanently and within
+                thumb reach — two of them stacked in the same view is how a site
+                starts reading as an ad. It stays on desktop, where there is no
+                call bar. */}
             <Link href="/contact/#quote" className="pill hidden sm:inline-flex">
               Free quote
               <Arrow size={13} />

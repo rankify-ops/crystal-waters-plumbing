@@ -25,23 +25,40 @@ export function Hero() {
     <section className="on-dark relative min-h-[86vh] md:min-h-[92vh] overflow-hidden bg-navy-deep flex items-end">
       <div className="absolute inset-0">
         <Photo
-          name="hero-night-callout"
-          alt="Crystal Waters Plumbing van and jetting rig on a Gold Coast call-out at dusk"
+          name="team-vans"
+          alt="Nick and the Crystal Waters team in hi-vis between the Crystal Waters and EIC Electrical vans"
           sizes="100vw"
           priority
-          className="h-full w-full object-cover"
+          // .hero-photo carries the crop, which has to differ between the
+          // portrait and landscape framings — see globals.css.
+          className="hero-photo h-full w-full object-cover"
         />
-        {/* flat */}
-        <div className="absolute inset-0 bg-navy-deep/35" />
-        {/* left ramp, under the type */}
-        <div className="absolute inset-0 bg-gradient-to-r from-navy-deep/92 via-navy-deep/55 to-transparent" />
-        {/* top and bottom edges */}
-        <div className="absolute inset-x-0 top-0 h-56 bg-gradient-to-b from-navy-deep/85 to-transparent" />
-        <div className="absolute inset-x-0 bottom-0 h-72 bg-gradient-to-t from-navy-deep/88 to-transparent" />
+        {/* Flat tint, kept light — this photograph is the subject, not a
+            texture, so the wash has to leave the two of them readable. */}
+        <div className="absolute inset-0 bg-navy-deep/26" />
+        {/* The scrim runs from the BOTTOM and from the RIGHT, which is where
+            the type now sits. The old version ramped from the left and put the
+            two of them in shadow to light a headline that was standing on top
+            of them anyway. */}
+        <div className="absolute inset-x-0 bottom-0 h-[58%] bg-gradient-to-t from-navy-deep via-navy-deep/70 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-l from-navy-deep/88 via-navy-deep/30 to-transparent" />
+        {/* Top edge, seating the transparent header. */}
+        <div className="absolute inset-x-0 top-0 h-52 bg-gradient-to-b from-navy-deep/80 to-transparent" />
       </div>
 
       <div className="wrap relative w-full pb-14 pt-36 md:pb-20 md:pt-44">
-        <div className="max-w-[820px]">
+        {/*
+          The copy sits in the RIGHT column from lg up.
+
+          Not a stylistic choice — the photograph decides it. Nick and his mate
+          stand at 19–30% of the rendered width, and a left-hand headline runs
+          to about 66%, so the two people the client actually wants leading the
+          site were standing behind their own headline. Text right, subjects
+          left. Below lg the column is full width and the type sits under them
+          rather than beside them, which is why the bottom scrim carries the
+          contrast on a phone.
+        */}
+        <div className="max-w-[620px] lg:ml-auto lg:max-w-[560px]">
           <Reveal className="mb-8 flex flex-wrap items-center gap-x-5 gap-y-3">
             <span className="mi flex items-center gap-2.5 border border-white/20 px-3 py-1.5">
               <span className="relative flex h-1.5 w-1.5">
@@ -55,7 +72,13 @@ export function Hero() {
             </span>
           </Reveal>
 
-          <h1 className="dsp text-[clamp(40px,9.2vw,96px)]">
+          {/*
+            Down from a 96px cap. At that size the three stacked lines of
+            uppercase filled most of the frame and read as a poster rather than
+            as a headline — and the display tracking, which is tuned for a
+            couple of words, compounded it across nine syllables.
+          */}
+          <h1 className="dsp text-[clamp(32px,5.6vw,58px)]">
             <Reveal variant="mask">
               <span>Gold Coast</span>
             </Reveal>
