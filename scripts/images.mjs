@@ -1,0 +1,101 @@
+/*
+ * assets-raw/ → public/img/
+ *
+ * Everything the old WordPress site served, re-encoded once at build-authoring
+ * time rather than at request time. The export is static, so there is no image
+ * optimiser at runtime — this script IS the optimiser.
+ *
+ * Two widths per photograph (1600 and 800) so the srcset has something real to
+ * choose between on a phone; logos and the favicon pass through at one size.
+ */
+import sharp from "sharp";
+import { mkdirSync } from "node:fs";
+
+const OUT = "public/img";
+mkdirSync(OUT, { recursive: true });
+
+// [source, slug, treatment]
+const PHOTOS = [
+  // Hero + section photography
+  ["Untitled-design-32.jpg", "hero-night-callout"],
+  ["Untitled-design-25.jpg", "team-vans"],
+  ["Untitled-design-33.jpg", "sink-and-drain"],
+  ["Untitled-design-26.jpg", "nick-shower-rough-in"],
+  ["Untitled-design-28.jpg", "wall-leak-chase"],
+  ["Waterfall.jpg", "waterfall"],
+  ["House.jpg", "house"],
+  ["DJI_0129.jpg", "drone-roof"],
+  ["Surf-Life-Saving.jpg", "surf-life-saving"],
+  ["Lightning.jpg", "storm"],
+  // Service leads
+  ["Bathroom-1.jpg", "svc-bathroom"],
+  // Types-of-Plumbing.png is deliberately not here: despite the filename it is a
+  // photograph of the sister company's ELECTRICAL van, not a plumbing job.
+  ["Kitchen.jpg", "svc-kitchen"],
+  ["Hot-2-1.jpg", "svc-hot-water"],
+  ["Water-Leak.jpg", "svc-water-leak"],
+  ["Thermal.jpg", "svc-thermal"],
+  // Team portraits
+  ["Me.jpg", "team-nick"],
+  ["Hayden.jpg", "team-hayden"],
+  ["Ethan.jpg", "team-ethan"],
+  ["Lee.jpg", "team-lee"],
+  // Gallery
+  ["Vanity.jpg", "g-vanity"],
+  ["Shower.jpg", "g-shower"],
+  ["Perfection.jpg", "g-perfection"],
+  ["1-1.jpg", "g-bathroom-1"],
+  ["4-1.jpg", "g-bathroom-2"],
+  ["1.jpg", "g-bathroom-3"],
+  ["2-1.jpg", "g-bathroom-4"],
+  ["3-1.jpg", "g-bathroom-5"],
+  ["Kerb.jpg", "g-kerb-1"],
+  ["Kerb-2-1.jpg", "g-kerb-2"],
+  ["Kerb-3.jpg", "g-kerb-3"],
+  ["Gas-1.jpg", "g-gas-1"],
+  ["Gas-2.jpg", "g-gas-2"],
+  ["Gas-3.jpg", "g-gas-3"],
+  ["Hot-1.jpg", "g-hot-1"],
+  ["Hot-2.jpg", "g-hot-2"],
+  ["Hot-3.jpg", "g-hot-3"],
+  ["Bathroom.jpg", "g-bathroom-6"],
+];
+
+const WIDTHS = [1600, 800];
+
+const manifest = {};
+
+for (const [src, slug] of PHOTOS) {
+  const input = `assets-raw/${src}`;
+  const meta = await sharp(input).metadata();
+  manifest[slug] = { w: meta.width, h: meta.height };
+  for (const w of WIDTHS) {
+    // Never upscale — a 600px source blown to 1600 is just a bigger blur.
+    const width = Math.min(w, meta.width);
+    await sharp(input)
+      .rotate()
+      .resize(width, null, { withoutEnlargement: true })
+      .webp({ quality: 78 })
+      .toFile(`${OUT}/${slug}-${w}.webp`);
+  }
+  console.log("photo", slug, `${meta.width}x${meta.height}`);
+}
+
+// Logo: the supplied wordmark, trimmed of its transparent margin so it can be
+// sized by height in the header without a mystery gap either side.
+await sharp("assets-raw/Crystal-Waters-Plumbing-Logo.pdf.png")
+  .trim()
+  .resize(760, null, { withoutEnlargement: true })
+  .png({ compressionLevel: 9 })
+  .toFile(`${OUT}/logo.png`);
+
+// Favicon, from the same mark.
+for (const size of [32, 180, 192, 512]) {
+  await sharp("assets-raw/cropped-cropped-Divi-Plumber-Favicon.png")
+    .resize(size, size, { fit: "contain", background: { r: 0, g: 0, b: 0, alpha: 0 } })
+    .png()
+    .toFile(`${OUT}/icon-${size}.png`);
+}
+
+console.log("\nmanifest:", JSON.stringify(manifest, null, 0).slice(0, 200), "…");
+console.log("done");

@@ -1,0 +1,616 @@
+@import "tailwindcss";
+
+/*
+ * Crystal Waters Plumbing & Drainage
+ * ──────────────────────────────────
+ * Light body, dark hero. The palette is sampled straight out of their logo
+ * wordmark — nothing here is eyeballed.
+ *
+ * The rules this system enforces:
+ *
+ *   1. One typeface doing every job. Display and micro-type are the same
+ *      family at different sizes; the technical register comes from
+ *      SMALL + UPPERCASE + TIGHT TRACKING, not from bolting on a second face.
+ *   2. Hard cuts between sections. No gradients between slabs — each section
+ *      is a solid ground the next one butts against.
+ *   3. Grain over everything. Flat fields band on cheap panels and read as an
+ *      unstyled div; grain reads as print.
+ *   4. Real numbers as ornament. 25 years, 205 reviews, the suburb list. The
+ *      cheapest way to look like a business that counts things.
+ *
+ * TWO PALETTES
+ * The hero and the deep slabs keep white type on navy; everything else runs
+ * light. Both sets resolve through the SAME variable names, re-pointed inside
+ * .on-dark, so a component never needs to know which ground it sits on.
+ */
+
+:root {
+  /* ── Brand, sampled from Crystal-Waters-Plumbing-Logo.png ──────────────
+       #00c0f0  the bright cyan in the wordmark top edge
+       #0090d8  its midtone
+       #0078c0  its lower edge
+       #004890  the shadow under the letterforms
+     The wordmark runs a four-stop gradient; the site only needs two of them,
+     plus a dark that gradient could plausibly have come from. */
+  --aqua: #00a6e0;
+  --aqua-bright: #35d0ff;
+  --aqua-deep: #0072b8;
+
+  /* The dark ground. Pulled below the logo's darkest blue so the brand blues
+     still read as *bright* against it — a navy at #004890 would flatten the
+     accent into the background. */
+  --navy: #062a44;
+  --navy-deep: #041b2c;
+  /* One step up, for anything that has to read as navy *on* navy. */
+  --navy-lift: #0d4468;
+
+  /* ── Ink tiers ────────────────────────────────────────────────────────
+     Three solid colours, not one colour at three opacities. Alpha-faded ink
+     reads as switched off; a solid grey reads as a deliberate second voice.
+       --ink    primary   14.2:1 on --paper
+       --ink-2  body       6.8:1
+       --ink-3  labels     4.6:1  */
+  --ink: #062a44;
+  --ink-2: #46606f;
+  --ink-3: #78909d;
+
+  /* ── Light set ── */
+  --paper: #ffffff;
+  /* The alternating slab. Cool, so it sits under navy without going warm. */
+  --mist: #eff4f7;
+  --stone: #dde5ea;
+  --rule: #dde4e9;
+  --rule-dark: rgba(6, 42, 68, 0.13);
+
+  /* Google's own star gold, because these are Google reviews and that colour
+     is what people already read as a rating. */
+  --gold: #f4b400;
+  /* Emergency accent. Used on exactly one control, the burst-pipe callout. */
+  --alarm: #e0523a;
+
+  /* Display sits at 600 with heavy negative tracking — a combination that
+     only works UPPERCASE and above roughly 44px, where the round letters
+     stop colliding. */
+  --track-display: -0.045em;
+  --track-micro: -0.01em;
+
+  /* One curve for the whole site. Tailwind's default easing is a symmetric
+     ease that reads as "computer moved a thing"; this is the expo-out that
+     every hand-written transition here was already using. */
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-mist: var(--mist);
+  --color-stone: var(--stone);
+  --color-navy: var(--navy);
+  --color-navy-deep: var(--navy-deep);
+  --color-navy-lift: var(--navy-lift);
+  --color-aqua: var(--aqua);
+  --color-aqua-bright: var(--aqua-bright);
+  --color-aqua-deep: var(--aqua-deep);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-rule: var(--rule);
+  --color-gold: var(--gold);
+  --color-alarm: var(--alarm);
+  --font-sans: var(--font-geist);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --default-transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/*
+ * EVERYTHING BELOW LIVES IN THE COMPONENTS LAYER.
+ *
+ * Not cosmetic. Tailwind v4 declares `@layer theme, base, components,
+ * utilities`, and a rule written outside any layer beats every layered rule
+ * regardless of specificity. Unlayered, `.btn { display: inline-flex }` won
+ * against the `hidden` utility, so `class="btn hidden sm:inline-flex"` on the
+ * header's quote button stayed visible at 375px and wrapped across three
+ * lines over the logo.
+ *
+ * Inside `components`, utilities reliably win — which is what every
+ * `hidden`, `text-white/72` and `!px-4` in the components is assuming — while
+ * this file's own internal specificity (`.on-dark .btn-solid` beating
+ * `.btn-solid`) still resolves normally, because that contest happens within
+ * the one layer.
+ */
+@layer components {
+
+html {
+  overflow-x: hidden;
+  background: var(--paper);
+  scroll-behavior: smooth;
+  /* Anchor jumps land under the fixed header rather than behind it. */
+  scroll-padding-top: 92px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-geist), Geist, system-ui, sans-serif;
+  font-weight: 500;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background: var(--navy);
+  color: #fff;
+}
+
+/* ── DARK SCOPE ──────────────────────────────────────────────────────────
+   Re-points the shared tokens at their light-on-dark values. Every component
+   below can use one set of names and still be correct on either ground;
+   without this, a two-palette page ends up threading colour props through
+   half its components and drifting out of sync. */
+.on-dark {
+  --ink: #ffffff;
+  --ink-2: rgba(255, 255, 255, 0.64);
+  --ink-3: rgba(255, 255, 255, 0.44);
+  --rule: rgba(255, 255, 255, 0.14);
+  --rule-dark: rgba(255, 255, 255, 0.16);
+  --paper: var(--navy);
+  --mist: var(--navy-lift);
+  --stone: var(--navy-lift);
+  color: #fff;
+}
+
+/*
+ * LIGHT ISLAND INSIDE A DARK SCOPE
+ *
+ * The quote form sits on the navy band but is itself a white card. Re-pointing
+ * the ink tokens is not enough on its own: `.on-dark .btn-solid` is a
+ * descendant selector, so it keeps matching inside the card and paints the
+ * submit button white on white. These rules restore both the tokens and the
+ * two button treatments, at a specificity that beats the .on-dark pair.
+ */
+.on-light {
+  --ink: #062a44;
+  --ink-2: #46606f;
+  --ink-3: #78909d;
+  --rule: #dde4e9;
+  --rule-dark: rgba(6, 42, 68, 0.13);
+  --paper: #ffffff;
+  --mist: #eff4f7;
+  --stone: #dde5ea;
+  color: var(--ink);
+}
+
+.on-dark .on-light .btn:hover {
+  background: var(--navy);
+  border-color: var(--navy);
+  color: #fff;
+}
+
+.on-dark .on-light .btn-solid {
+  background: var(--navy);
+  border-color: var(--navy);
+  color: #fff;
+}
+
+.on-dark .on-light .btn-solid:hover {
+  background: var(--navy-lift);
+  border-color: var(--navy-lift);
+  color: #fff;
+}
+
+.on-dark .on-light .btn-aqua,
+.on-dark .on-light .btn-aqua:hover {
+  color: #fff;
+}
+
+.on-dark .on-light .btn-aqua {
+  background: var(--aqua);
+  border-color: var(--aqua);
+}
+
+.on-dark .on-light .btn-aqua:hover {
+  background: var(--aqua-deep);
+  border-color: var(--aqua-deep);
+}
+
+/* ── TYPE ────────────────────────────────────────────────────────────────
+   Display. Uppercase only — the tracking is far too tight for lowercase. */
+.dsp {
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: var(--track-display);
+  line-height: 0.88;
+}
+
+/* Looser cut, for longer sentences set large. */
+.dsp-sm {
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+/* Sentence-case variant, where a heading is meant to read as prose. Same
+   weight and rhythm with the transform dropped. */
+.dsp-sentence {
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.06;
+}
+
+/*
+ * Micro-type. Every label, caption, nav item, button and stat caption.
+ * 11px / 600 / uppercase is the whole trick.
+ */
+.mi {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: var(--track-micro);
+  line-height: 1.45;
+}
+
+.mi-lg {
+  font-size: 12.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: var(--track-micro);
+  line-height: 1.5;
+}
+
+/*
+ * Body copy.
+ *
+ * This is the one place Crystal Waters departs from the Gold Coast Shower
+ * Screens system it is modelled on. That site sets body copy UPPERCASE, which
+ * works there because its longest paragraph is two lines. This site has
+ * service pages carrying 60–80 word paragraphs migrated from the old build,
+ * and uppercase at that length stops being a style and starts being
+ * unreadable — caps strip out the word-shape cues people actually read by.
+ * So: sentence case, 400 weight, generous leading. The technical register is
+ * carried entirely by the .mi labels and the display type around it.
+ */
+.bd {
+  font-size: 15px;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.72;
+  color: var(--ink-2);
+}
+
+.bd-lg {
+  font-size: 17px;
+  font-weight: 400;
+  line-height: 1.66;
+  color: var(--ink-2);
+}
+
+.bd-sm {
+  font-size: 13.5px;
+  font-weight: 400;
+  line-height: 1.68;
+  color: var(--ink-2);
+}
+
+/* Dimming a phrase mid-sentence is how this system creates emphasis. There is
+   no bold — everything is already 500/600 — so tone has to carry it. */
+.dim {
+  color: var(--ink-3);
+}
+
+/* The one accent voice. Section labels, and single words inside display type. */
+.hi {
+  color: var(--aqua);
+}
+
+.on-dark .hi {
+  color: var(--aqua-bright);
+}
+
+/* ── GRAIN ───────────────────────────────────────────────────────────────
+   Fixed, not absolute: one plane across the viewport that the page scrolls
+   underneath, so the texture never appears to travel with the content. */
+.grain::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 60;
+  opacity: 0.12;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22200%22 height=%22200%22 filter=%22url(%23n)%22/%3E%3C/svg%3E");
+}
+
+/* ── ENTRANCES ───────────────────────────────────────────────────────────
+   Two of them, one observer, both fire once. Elements that re-animate on every
+   re-entry make a long page feel restless. */
+.mask {
+  overflow: hidden;
+  display: block;
+}
+
+.mask > * {
+  display: block;
+  transform: translateY(105%);
+  transition: transform 1.05s var(--ease);
+}
+
+.mask[data-shown="true"] > * {
+  transform: translateY(0);
+}
+
+.rise {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity 0.9s var(--ease),
+    transform 0.9s var(--ease);
+}
+
+.rise[data-shown="true"] {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mask > *,
+  .rise {
+    transform: none !important;
+    opacity: 1 !important;
+    transition: none !important;
+  }
+}
+
+/* ── CONTROLS ────────────────────────────────────────────────────────────
+   Buttons read off --rule-dark and --ink, so the same markup is correct on a
+   light ground and inside .on-dark with no variant class. */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  border: 1px solid var(--rule-dark);
+  color: var(--ink);
+  padding: 15px 24px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: var(--track-micro);
+  transition:
+    background-color 0.45s var(--ease),
+    color 0.45s var(--ease),
+    border-color 0.45s var(--ease);
+}
+
+.btn:hover {
+  background: var(--navy);
+  border-color: var(--navy);
+  color: #fff;
+}
+
+.on-dark .btn:hover {
+  background: #fff;
+  border-color: #fff;
+  color: var(--navy);
+}
+
+.btn-solid {
+  background: var(--navy);
+  border-color: var(--navy);
+  color: #fff;
+}
+
+.btn-solid:hover {
+  background: var(--navy-lift);
+  border-color: var(--navy-lift);
+  color: #fff;
+}
+
+.on-dark .btn-solid {
+  background: #fff;
+  border-color: #fff;
+  color: var(--navy);
+}
+
+.on-dark .btn-solid:hover {
+  background: var(--aqua);
+  border-color: var(--aqua);
+  color: #fff;
+}
+
+/* The single accent control: the phone number, wherever it appears as a
+   button. It is the only thing on the site allowed to be aqua-filled. */
+.btn-aqua {
+  background: var(--aqua);
+  border-color: var(--aqua);
+  color: #fff;
+}
+
+.btn-aqua:hover,
+.on-dark .btn-aqua:hover {
+  background: var(--aqua-deep);
+  border-color: var(--aqua-deep);
+  color: #fff;
+}
+
+/* Underline that draws in from the left. */
+.ln {
+  position: relative;
+  display: inline-block;
+}
+
+.ln::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: -3px;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s var(--ease);
+}
+
+.ln:hover::after {
+  transform: scaleX(1);
+}
+
+/* Live dot on the floating call bar. Reads as "someone is actually there"
+   rather than as decoration — the ring expands and fades, the core stays. */
+@keyframes ping {
+  0% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  70%,
+  100% {
+    transform: scale(2.6);
+    opacity: 0;
+  }
+}
+
+.ping {
+  animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ping {
+    animation: none;
+  }
+}
+
+/* ── LAYOUT PRIMITIVES ───────────────────────────────────────────────────
+   One measure for the whole site. Sections set their own vertical rhythm; the
+   horizontal gutter is decided once, here. */
+.wrap {
+  width: 100%;
+  max-width: 1280px;
+  margin-inline: auto;
+  padding-inline: 20px;
+}
+
+@media (min-width: 768px) {
+  .wrap {
+    padding-inline: 40px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .wrap {
+    padding-inline: 56px;
+  }
+}
+
+.sec {
+  padding-block: 72px;
+}
+
+@media (min-width: 768px) {
+  .sec {
+    padding-block: 112px;
+  }
+}
+
+/* A hairline spanning the measure, carrying a label. Opens most sections. The
+   label sits *on* the line rather than above it, which is what stops it
+   reading as an orphaned caption. */
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  color: var(--aqua);
+}
+
+.eyebrow::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--rule);
+}
+
+.on-dark .eyebrow {
+  color: var(--aqua-bright);
+}
+
+/* ── TICKS ───────────────────────────────────────────────────────────────
+   The service lists on every service page. A drawn tick rather than a glyph,
+   because ✓ renders as four different shapes across platforms. */
+.tick {
+  position: relative;
+  padding-left: 30px;
+}
+
+.tick::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.42em;
+  width: 13px;
+  height: 7px;
+  border-left: 1.5px solid var(--aqua);
+  border-bottom: 1.5px solid var(--aqua);
+  transform: rotate(-45deg);
+}
+
+.on-dark .tick::before {
+  border-color: var(--aqua-bright);
+}
+
+/* ── PHOTO FRAMES ────────────────────────────────────────────────────────
+   Every photograph here is a migrated phone snap from a job site: honest, but
+   inconsistent in exposure and white balance. A shared frame — slight
+   desaturation and a navy tint over the shadows — is what makes thirty-eight
+   of them read as one set rather than as somebody's camera roll. */
+.plate {
+  position: relative;
+  overflow: hidden;
+  background: var(--stone);
+}
+
+.plate img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: saturate(0.92) contrast(1.02);
+  transition: transform 1.2s var(--ease);
+}
+
+.plate::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    rgba(6, 42, 68, 0.05),
+    rgba(6, 42, 68, 0.14)
+  );
+}
+
+.plate-zoom:hover img {
+  transform: scale(1.045);
+}
+
+/* ── NUMERALS ────────────────────────────────────────────────────────────
+   Stat figures are the only type on the site set below 500 weight. At 44px+
+   a 600 numeral is a slab; 400 with tight tracking reads as a measurement. */
+.num {
+  font-weight: 400;
+  letter-spacing: -0.04em;
+  line-height: 0.9;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── STARS ───────────────────────────────────────────────────────────────*/
+.stars {
+  color: var(--gold);
+  letter-spacing: 0.12em;
+  font-size: 13px;
+}
+
+}
