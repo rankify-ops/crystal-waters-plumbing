@@ -58,7 +58,9 @@ export function Hero() {
           biased so the van and the two of them sit right of the text, and the
           left ramp carries the contrast.
         */}
-        <div className="max-w-[600px]">
+        {/* No max-width on the block itself — the headline runs the full
+            measure. The paragraph and the buttons set their own. */}
+        <div>
           <Reveal className="mb-8 flex flex-wrap items-center gap-x-5 gap-y-3">
             <span className="mi flex items-center gap-2.5 border border-white/20 px-3 py-1.5">
               <span className="relative flex h-1.5 w-1.5">
@@ -73,20 +75,26 @@ export function Hero() {
           </Reveal>
 
           {/*
-            Down from a 96px cap. At that size the three stacked lines of
-            uppercase filled most of the frame and read as a poster rather than
-            as a headline — and the display tracking, which is tuned for a
-            couple of words, compounded it across nine syllables.
+            Two lines, and "PLUMBING & DRAINAGE" is never one of the places it
+            breaks — hence the nowrap.
+
+            The SIZE is unchanged — the block just runs the full measure now
+            instead of being trapped in a 600px column, which is all it needed
+            to fit on one line. At the 58px cap the long line measures about
+            616px against a 1168px container, so there is plenty of room.
+
+            The 26px floor is set by the same line at the other end: on a 320px
+            phone it needs to be that small to stay on one line inside a 280px
+            container.
           */}
-          <h1 className="dsp text-[clamp(32px,5.6vw,58px)]">
+          <h1 className="dsp text-[clamp(26px,5.6vw,58px)]">
             <Reveal variant="mask">
               <span>Gold Coast</span>
             </Reveal>
             <Reveal variant="mask" delay={90}>
-              <span className="hi">plumbing &amp;</span>
-            </Reveal>
-            <Reveal variant="mask" delay={180}>
-              <span>drainage</span>
+              <span className="whitespace-nowrap">
+                <span className="hi">plumbing</span> &amp; drainage
+              </span>
             </Reveal>
           </h1>
 
