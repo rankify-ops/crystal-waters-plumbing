@@ -83,18 +83,23 @@ export function Hero() {
             to fit on one line. At the 58px cap the long line measures about
             616px against a 1168px container, so there is plenty of room.
 
-            The 26px floor is set by the same line at the other end: on a 320px
-            phone it needs to be that small to stay on one line inside a 280px
-            container.
+            The vw factor went 5.6 to 8 to lift the phone size. It is doing the
+            work a flat floor used to: at 5.6vw a 375px phone fell back to the
+            26px minimum, which was set by the WORST case (a 320px screen) and
+            so left the common case smaller than it needed to be. At 8vw the
+            size tracks the viewport all the way down — about 30px at 375px,
+            25.6px at 320px — and the long line stays inside the container at
+            every width, with roughly 5% to spare at the tightest.
+
+            The 58px ceiling is unchanged; it is simply reached at 725px now
+            rather than at 1036px.
           */}
-          <h1 className="dsp text-[clamp(26px,5.6vw,58px)]">
+          <h1 className="dsp text-[clamp(22px,8vw,58px)]">
             <Reveal variant="mask">
               <span>Gold Coast</span>
             </Reveal>
             <Reveal variant="mask" delay={90}>
-              <span className="whitespace-nowrap">
-                <span className="hi">plumbing</span> &amp; drainage
-              </span>
+              <span className="hi whitespace-nowrap">plumbing &amp; drainage</span>
             </Reveal>
           </h1>
 
