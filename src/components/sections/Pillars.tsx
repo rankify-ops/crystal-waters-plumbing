@@ -25,7 +25,19 @@ export function Pillars() {
             <Reveal
               key={p.label}
               delay={i * 90}
-              className={`group py-10 md:py-14 lg:px-8 lg:first:pl-0 lg:last:pr-0 ${
+              /*
+               * The gutter has to exist at EVERY breakpoint, not just lg.
+               * `lg:px-8` alone left the two-column layouts with zero
+               * horizontal padding, so the copy in the right-hand column
+               * started hard against the divider rule and the copy in the left
+               * column ran into it. Cells in a left column get padding on the
+               * right, cells in a right column get it on the left, and the
+               * outer edges stay flush with the container so the band still
+               * lines up with every other section.
+               */
+              className={`group py-10 md:py-14 ${
+                i % 2 === 0 ? "md:pr-8" : "md:pl-8"
+              } lg:px-8 lg:first:pl-0 lg:last:pr-0 ${
                 i > 0 ? "border-t border-[var(--rule)] md:border-t-0" : ""
               } ${i % 2 === 1 ? "md:border-l md:border-[var(--rule)]" : ""} ${
                 i >= 2 ? "md:border-t md:border-[var(--rule)]" : ""
@@ -66,14 +78,25 @@ export function StatsBand() {
             <Reveal
               key={s.label}
               delay={i * 80}
-              className={`py-12 md:py-16 lg:px-8 lg:first:pl-0 ${
+              /*
+               * This band is two columns from 320px up, so the missing gutter
+               * was worst here: "LIFETIME WORKMANSHIP WARRANTY" wrapped tight
+               * against the rule on one side and "25+" sat on it from the
+               * other. Same rule as the pillars above — inner edges padded,
+               * outer edges flush with the container.
+               */
+              className={`py-12 md:py-16 ${
+                i % 2 === 0 ? "pr-5 sm:pr-8" : "pl-5 sm:pl-8"
+              } lg:px-8 lg:first:pl-0 lg:last:pr-0 ${
                 i % 2 === 1 ? "border-l border-[var(--rule)]" : ""
               } ${i >= 2 ? "border-t border-[var(--rule)] lg:border-t-0" : ""} ${
                 i === 2 ? "lg:border-l lg:border-[var(--rule)]" : ""
               }`}
             >
-              <div className="num text-[clamp(40px,7vw,62px)]">{s.figure}</div>
-              <div className="mi mt-4 max-w-[170px]" style={{ color: "var(--ink-3)" }}>
+              <div className="num text-[clamp(36px,7vw,62px)]">{s.figure}</div>
+              {/* max-w removed: at 170px the two-word labels wrapped to three
+                  lines inside a column that had room for two. */}
+              <div className="mi mt-4" style={{ color: "var(--ink-3)" }}>
                 {s.label}
               </div>
             </Reveal>

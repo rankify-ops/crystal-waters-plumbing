@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Hero } from "@/components/sections/Hero";
-import { Pillars, StatsBand } from "@/components/sections/Pillars";
+import { Pillars } from "@/components/sections/Pillars";
 import { ServicesGrid } from "@/components/sections/ServicesGrid";
 import { Process } from "@/components/sections/Process";
 import { Reviews } from "@/components/sections/Reviews";
@@ -18,7 +18,6 @@ export default function Home() {
       <Pillars />
       <ServicesGrid />
       <Intro />
-      <StatsBand />
       <Process />
       <Reviews limit={6} />
       <QuoteBand />

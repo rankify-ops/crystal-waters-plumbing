@@ -2,7 +2,7 @@ import Link from "next/link";
 import { site, yearsTrading } from "@/content/site";
 import { Photo } from "@/components/ui/Photo";
 import { Reveal } from "@/components/ui/Reveal";
-import { Phone, Arrow, Star, Google } from "@/components/ui/Icons";
+import { Phone, Arrow, Google, Spanner, Shield, Tag } from "@/components/ui/Icons";
 
 /*
  * The home hero.
@@ -62,15 +62,17 @@ export function Hero() {
         {/* No max-width on the block itself — the headline runs the full
             measure. The paragraph and the buttons set their own. */}
         <div>
-          <Reveal className="mb-8 flex flex-wrap items-center gap-x-5 gap-y-3">
-            <span className="mi flex items-center gap-2.5 border border-white/20 px-3 py-1.5">
+          {/* Pill, not a rectangle — the header CTA is a pill, so a squared
+              badge two inches below it read as a different design system. */}
+          <Reveal className="mb-7 flex flex-wrap items-center gap-x-4 gap-y-2.5">
+            <span className="mi flex items-center gap-2.5 rounded-full border border-white/20 bg-white/[0.07] px-4 py-2 backdrop-blur-md">
               <span className="relative flex h-1.5 w-1.5">
                 <span className="ping absolute inline-flex h-full w-full rounded-full bg-[var(--aqua-bright)] opacity-70" />
                 <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[var(--aqua-bright)]" />
               </span>
               Same-day call-outs available
             </span>
-            <span className="mi" style={{ color: "var(--ink-3)" }}>
+            <span className="mi text-white/45">
               Est. {site.establishedYear} · Robina
             </span>
           </Reveal>
@@ -107,40 +109,61 @@ export function Hero() {
             </p>
           </Reveal>
 
-          <Reveal delay={340} className="mt-10 flex flex-wrap gap-3">
-            <a href={site.phoneHref} className="btn btn-aqua">
+          {/* Pills, and side by side rather than stacked — two full-width
+              buttons on a phone is a stack of slabs, and it is what made the
+              hero feel unevenly spaced next to the Prime Group reference. */}
+          <Reveal delay={340} className="mt-9 flex flex-wrap gap-2.5">
+            <a href={site.phoneHref} className="pill !py-3.5 !px-6">
               <Phone size={15} />
               {site.phone}
             </a>
-            <Link href="/contact/#quote" className="btn">
+            <Link href="/contact/#quote" className="pill pill-ghost !py-3.5 !px-6">
               Get a free quote
               <Arrow size={14} />
             </Link>
           </Reveal>
 
           {/*
-            The rating.
+            The four proof points, as a card grid.
 
-            ONE ROW, not two. Stacking the stars above the caption made this
-            78px tall against 49px buttons — half again the height of the
-            primary call-to-action, which is the wrong thing to be the biggest
-            control in the hero. Laid out in a single line it sits at 50px,
-            level with the buttons, and is still far louder than the 22px mark
-            and 11px caption it replaced.
+            This replaces a single wide, thin review pill that never sat well —
+            2x2 on a phone, 4 across on a desktop, every card the same height.
+            It is the pattern from the Prime Group hero, and it works for the
+            same reason: an even grid reads as deliberate where one stretched
+            capsule reads as leftover space.
+
+            It also lets the home page drop the separate numbers band further
+            down, which was repeating three of these four figures verbatim.
           */}
-          <Reveal delay={420} className="mt-10">
-            <div className="inline-flex flex-wrap items-center gap-x-3 gap-y-1 rounded-full border border-white/18 bg-white/[0.08] px-5 py-3 backdrop-blur-md">
-              <Google size={22} />
-              <span className="stars flex gap-0.5">
-                {Array.from({ length: 5 }, (_, i) => (
-                  <Star key={i} size={15} />
-                ))}
-              </span>
-              <span className="num text-[17px] text-white">{site.reviews.rating}</span>
-              <span className="mi text-white/60">
-                from {site.reviews.count}+ Google reviews
-              </span>
-            </div>
+          {/* auto-rows-fr, so the row whose label wraps does not end up taller
+              than the row whose label does not. Shortening the labels got the
+              cards within a row matching; this is what matches the rows to
+              each other. */}
+          <Reveal delay={420} className="mt-9 grid max-w-[560px] auto-rows-fr grid-cols-2 gap-2.5 lg:max-w-[760px] lg:grid-cols-4">
+            {[
+              /* Labels are kept to two words. At this card width anything
+                 longer wrapped to a second line, and because only some of them
+                 wrapped, the rows came out different heights — which is the
+                 exact unevenness the grid was brought in to fix. The Google
+                 mark already says "Google", so the first label does not. */
+              { mark: <Google size={20} />, value: site.reviews.rating, label: `${site.reviews.count}+ reviews` },
+              { mark: <Spanner size={19} />, value: "25+", label: "Years trading" },
+              { mark: <Shield size={19} />, value: "Lifetime", label: "Warranty" },
+              { mark: <Tag size={19} />, value: "$0", label: "Call-out fee" },
+            ].map((s) => (
+              <div
+                key={s.label}
+                className="flex items-center gap-3 rounded-2xl border border-white/14 bg-white/[0.07] px-3.5 py-3 backdrop-blur-md"
+              >
+                <span className="grid h-9 w-9 flex-none place-items-center rounded-xl bg-white/10 text-[var(--aqua-bright)]">
+                  {s.mark}
+                </span>
+                <span className="min-w-0">
+                  <span className="num block text-[17px] text-white">{s.value}</span>
+                  <span className="mi mt-1 block leading-tight text-white/55">{s.label}</span>
+                </span>
+              </div>
+            ))}
           </Reveal>
         </div>
       </div>
