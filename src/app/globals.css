@@ -773,11 +773,12 @@ body {
  *   - Desktop: the file is a shade wider than the hero, so `cover` trims a few
  *     percent off the sides and nothing else. Centre is correct.
  *   - Phone: the hero is portrait, so two thirds of the WIDTH still goes.
- *     Biased left, because the two of them stand at 14–43% across the frame
- *     and a centred crop starts after them.
+ *     Biased hard RIGHT, because that is where the person is — he stands at
+ *     about 80% across, and anything near centre crops him off entirely and
+ *     leaves a phone-sized close-up of a van door.
  */
 .hero-photo {
-  object-position: 20% 50%;
+  object-position: 90% 50%;
 }
 
 @media (min-width: 1024px) {

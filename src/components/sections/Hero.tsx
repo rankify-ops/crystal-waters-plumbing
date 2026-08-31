@@ -124,16 +124,32 @@ export function Hero() {
             </Link>
           </Reveal>
 
-          <Reveal delay={420} className="mt-12 flex items-center gap-4 border-t border-white/12 pt-7">
-            <Google size={22} />
-            <span className="stars flex gap-0.5">
-              {Array.from({ length: 5 }, (_, i) => (
-                <Star key={i} size={13} />
-              ))}
-            </span>
-            <span className="mi">
-              {site.reviews.rating} from {site.reviews.count} Google reviews
-            </span>
+          {/*
+            The rating, promoted from a hairline caption to a card.
+
+            It was a 22px mark, 13px stars and one line of 11px micro-type
+            under a divider — technically present, and completely ignorable.
+            For a trade, 205 five-star reviews is the single strongest thing on
+            the page, so it now gets a frosted panel of its own, a 34px Google
+            mark, 19px stars and the score set at display size.
+          */}
+          <Reveal delay={420} className="mt-11">
+            <div className="inline-flex items-center gap-4 rounded-2xl border border-white/18 bg-white/[0.07] px-5 py-4 backdrop-blur-md sm:gap-5 sm:px-6">
+              <Google size={34} />
+              <div>
+                <div className="flex items-center gap-2.5">
+                  <span className="stars flex gap-1">
+                    {Array.from({ length: 5 }, (_, i) => (
+                      <Star key={i} size={19} />
+                    ))}
+                  </span>
+                  <span className="num text-[22px] text-white">{site.reviews.rating}</span>
+                </div>
+                <div className="mi mt-2 text-white/60">
+                  From {site.reviews.count}+ Google reviews
+                </div>
+              </div>
+            </div>
           </Reveal>
         </div>
       </div>

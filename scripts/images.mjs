@@ -76,25 +76,33 @@ const UPSCALED = {};
 /*
  * THE HERO, PRE-CROPPED TO THE HERO'S OWN RATIO
  *
- * Lee.jpg — the two of them beside the branded van — is 2048x1536, a 4:3
- * frame. A full-bleed hero is roughly 2:1, so `object-fit: cover` throws away
- * a THIRD of its height, and crucially the amount it throws away depends on
- * the viewport's ratio. That is what made this unfixable by tuning
- * `object-position`: a value that framed both faces neatly at 1440x860 sliced
- * their heads off under the header at 1920x1080, because the same percentage
- * of a different crop is a different part of the picture.
+ * WHICH PHOTOGRAPH. Ethan.jpg, not Lee.jpg. Both show a team member with the
+ * branded van; the difference is where the person stands. In Lee.jpg the two
+ * of them are at 14–43% across, which is exactly where a left-aligned headline
+ * goes — no crop could separate them, because there is nothing to their left
+ * in the frame to push them rightward with. In Ethan.jpg the van's lettering
+ * runs along the left and the person stands at about 80%, so the copy lands on
+ * the plain white flank of the van and the human being is left alone. It is
+ * also the highest-resolution photograph in the library at 2048x1536.
  *
- * So the framing is decided ONCE, here, at 2.13:1 — a shade wider than any
- * hero the layout produces. The browser is then left with a few percent of
- * horizontal crop to do and nothing else, and the composition is identical on
- * every screen.
+ * WHY PRE-CROP AT ALL. The source is 4:3 and a full-bleed hero is roughly 2:1,
+ * so `object-fit: cover` throws away a third of the height — and the amount it
+ * throws away depends on the viewport's ratio. That is what made this
+ * unfixable by tuning `object-position` alone: a value that framed a face
+ * neatly at 1440x860 sliced heads off under the header at 1920x1080, because
+ * the same percentage of a different crop is a different part of the picture.
  *
- * top: 300 is chosen so their heads land at about 15% of the frame: below the
- * fixed header, and above the headline, at every viewport rather than at one.
+ * Deciding it once, here, at 2:1 — wider than any hero the layout produces —
+ * leaves the browser a few percent of horizontal trim and nothing else, so the
+ * composition is identical on every screen.
+ *
+ * top: 220 puts his head at about 16% of the frame: below the fixed header at
+ * every viewport rather than at one, with his feet cropped instead of the sky
+ * kept.
  */
 await (async () => {
-  const src = "assets-raw/Lee.jpg";
-  const crop = { left: 0, top: 300, width: 2048, height: 961 };
+  const src = "assets-raw/Ethan.jpg";
+  const crop = { left: 0, top: 220, width: 2048, height: 1024 };
   for (const w of WIDTHS) {
     await sharp(src)
       .rotate()
@@ -103,7 +111,7 @@ await (async () => {
       .webp({ quality: 82 })
       .toFile(`${OUT}/hero-team-van-${w}.webp`);
   }
-  console.log("hero  hero-team-van (pre-cropped to 2.13:1)");
+  console.log("hero  hero-team-van (Ethan.jpg, pre-cropped to 2:1)");
 })();
 
 const manifest = {};
