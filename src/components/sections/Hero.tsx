@@ -111,15 +111,27 @@ export function Hero() {
             </p>
           </Reveal>
 
-          {/* Pills, and side by side rather than stacked — two full-width
-              buttons on a phone is a stack of slabs, and it is what made the
-              hero feel unevenly spaced next to the Prime Group reference. */}
-          <Reveal delay={340} className="mt-9 flex flex-wrap gap-2.5">
-            <a href={site.phoneHref} className="pill !py-3.5 !px-6">
+          {/*
+            The buttons share the CARD GRID below them: same max-width, same
+            two columns, same gap. Left as a flex row with intrinsic widths
+            they came out two different sizes, neither of which lined up with
+            anything underneath — a phone number is shorter than "Get a free
+            quote", so the pair sat at a ragged edge above a tidy grid.
+
+            Now button one sits over card one and button two over card two, at
+            identical widths. From lg the cards go to four columns and the
+            buttons go back to their natural size, because a 375px-wide pill is
+            not a button, it is a banner.
+          */}
+          <Reveal
+            delay={340}
+            className="mt-9 grid max-w-[560px] grid-cols-2 gap-2.5 lg:flex lg:max-w-none lg:gap-3"
+          >
+            <a href={site.phoneHref} className="pill !px-3 !py-3.5 sm:!px-6">
               <Phone size={15} />
               {site.phone}
             </a>
-            <QuoteLink className="pill pill-ghost !py-3.5 !px-6">
+            <QuoteLink className="pill pill-ghost !px-3 !py-3.5 sm:!px-6">
               Get a free quote
               <Arrow size={14} />
             </QuoteLink>
