@@ -5,20 +5,30 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { site, services } from "@/content/site";
 import { asset } from "@/lib/basePath";
-import { Phone, Mail, Facebook, Arrow } from "@/components/ui/Icons";
+import { Phone, Mail, Pin, Facebook, Arrow } from "@/components/ui/Icons";
 
 /*
- * One header for the whole site.
+ * One header for the whole site, modelled on the MJB Electrical bar.
  *
- * Every page opens on a dark hero, so the bar starts transparent and inverts to
- * solid white once the hero is behind it. The threshold is 40px rather than 0
- * so a one-pixel scroll jitter on a trackpad does not strobe the background.
+ * The four things that make that one work, and what each one is doing here:
  *
- * The old site ran two stacked bars — a utility strip with the phone number and
- * a nav below it — which cost 120px of vertical space before any content. That
- * strip is kept, but only above 1024px and only 34px tall; below that the phone
- * number lives in the bar itself and in the fixed call bar at the bottom of the
- * viewport, where a thumb can reach it.
+ *   1. FROSTED, NOT SOLID. Over the hero it is transparent; past 40px it
+ *      becomes a blurred glass panel rather than a flat white bar, so the
+ *      photograph stays visible through it and the page keeps some depth. The
+ *      blur lives in `.frost` — see the warning there about Lightning CSS.
+ *   2. IT SHRINKS. 78px down to 64px. Small enough not to be a visible event,
+ *      big enough that the page feels like it made room once you started
+ *      reading.
+ *   3. TWO LOGO FILES, CROSSFADED. Not a CSS filter — see scripts/images.mjs
+ *      for why `brightness(0) invert(1)` produced an unreadable smear on this
+ *      particular mark.
+ *   4. ONE PILL CTA. The phone number sits beside it as plain bold text, so
+ *      there is exactly one filled control in the bar and no competition for
+ *      where to look.
+ *
+ * The old two-row layout (a utility strip above the nav) is gone: it cost 34px
+ * of permanent vertical space to repeat an email address and a service area
+ * that both already live in the footer and in the mobile drawer.
  */
 
 const NAV = [
@@ -35,6 +45,8 @@ export function Header() {
   const pathname = usePathname();
 
   useEffect(() => {
+    // 40px rather than 0, so a one-pixel trackpad jitter at the top of the page
+    // does not strobe the background on and off.
     const onScroll = () => setScrolled(window.scrollY > 40);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -42,14 +54,10 @@ export function Header() {
   }, []);
 
   /*
-   * Close the drawer on navigation — a client-side route change would
-   * otherwise leave it open over the new page.
-   *
-   * Adjusted during render rather than in an effect. An effect would paint the
-   * new page with the drawer still covering it for one frame, and setState
-   * inside an effect body is the cascading-render pattern React now warns
-   * about. Comparing against the path the drawer was opened at also catches
-   * back/forward navigation, which an onClick on the links would miss.
+   * Close the drawer on navigation. Adjusted during render rather than in an
+   * effect: an effect would paint the new page with the drawer still covering
+   * it for one frame. Comparing against the path the drawer was opened at also
+   * catches back/forward, which an onClick on the links would miss.
    */
   const [openedAt, setOpenedAt] = useState(pathname);
   if (pathname !== openedAt) {
@@ -65,69 +73,36 @@ export function Header() {
     };
   }, [open]);
 
-  const solid = scrolled || open;
+  const light = scrolled && !open;
 
   return (
     <>
       <header
-        className={`fixed inset-x-0 top-0 z-50 transition-[background-color,border-color,box-shadow] duration-500 ${
-          solid
-            ? "bg-paper border-b border-[var(--rule)] shadow-[0_1px_24px_rgba(6,42,68,0.06)]"
-            : "on-dark border-b border-transparent"
+        className={`fixed inset-x-0 top-0 z-50 transition-[background-color,box-shadow,border-color] duration-400 ${
+          light ? "frost" : "on-dark border-b border-transparent"
         }`}
       >
-        {/* Utility strip. Desktop only — see the note above. */}
         <div
-          className={`hidden lg:block border-b transition-colors duration-500 ${
-            solid ? "border-[var(--rule)]" : "border-white/12"
+          className={`wrap flex items-center justify-between gap-6 transition-[height] duration-400 ${
+            scrolled ? "h-[64px]" : "h-[78px]"
           }`}
         >
-          <div className="wrap flex h-[34px] items-center justify-between">
-            <div className="flex items-center gap-6">
-              <a href={site.phoneHref} className="mi flex items-center gap-2 hover:text-aqua transition-colors">
-                <Phone size={13} />
-                {site.phone}
-              </a>
-              <a href={site.emailHref} className="mi flex items-center gap-2 hover:text-aqua transition-colors">
-                <Mail size={13} />
-                {site.email}
-              </a>
-            </div>
-            <div className="flex items-center gap-5">
-              <span className="mi" style={{ color: "var(--ink-3)" }}>
-                {site.serviceArea}
-              </span>
-              <a
-                href={site.facebook}
-                target="_blank"
-                rel="noreferrer noopener"
-                aria-label="Crystal Waters Plumbing on Facebook"
-                className="hover:text-aqua transition-colors"
-              >
-                <Facebook size={14} />
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <div className="wrap flex h-[62px] lg:h-[72px] items-center justify-between gap-6">
-          <Link href="/" className="shrink-0" aria-label={`${site.name} — home`}>
-            {/*
-              The supplied logo is a blue wordmark with a dark subtitle, which
-              disappears against the dark hero. Rather than commission a second
-              file, the whole mark is brightness-inverted while the bar is
-              transparent — the blue survives the invert as a pale blue, and the
-              dark subtitle becomes legible.
-            */}
-            {/* eslint-disable-next-line @next/next/no-img-element -- the export
-                is unoptimised, so next/image would only add a wrapper. */}
-            <img
-              src={asset("/img/logo.png")}
-              alt={site.legalName}
-              width={190}
-              height={44}
-              className="h-[30px] lg:h-[36px] w-auto transition-[filter] duration-500"
-              style={{ filter: solid ? "none" : "brightness(0) invert(1)" }}
+          <Link href="/" className="relative block shrink-0" aria-label={`${site.name} — home`}>
+            {/* Both files are always in the DOM and crossfade on scroll. The
+                dark-ground one is absolutely positioned over the light one so
+                there is no reflow between them, and the light one carries the
+                layout height. */}
+            <Logo
+              src="logo-mark.png"
+              scrolled={scrolled}
+              className="relative"
+              style={{ opacity: light ? 1 : 0 }}
+            />
+            <Logo
+              src="logo-mark-dark.png"
+              scrolled={scrolled}
+              className="absolute inset-0"
+              style={{ opacity: light ? 0 : 1 }}
             />
           </Link>
 
@@ -144,7 +119,7 @@ export function Header() {
                   >
                     {item.label}
                     {item.children && (
-                      <svg width="9" height="9" viewBox="0 0 10 10" aria-hidden="true" className="opacity-50">
+                      <svg width="9" height="9" viewBox="0 0 10 10" aria-hidden="true" className="opacity-50 transition-transform duration-300 group-hover:rotate-180">
                         <path d="m2 4 3 3 3-3" fill="none" stroke="currentColor" strokeWidth="1.4" />
                       </svg>
                     )}
@@ -154,21 +129,20 @@ export function Header() {
                     // Opens on hover and on keyboard focus within, so the
                     // submenu is reachable without a mouse.
                     <div className="invisible absolute left-0 top-full w-[290px] translate-y-1 opacity-0 transition-all duration-300 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100">
-                      <div className="mt-1 border border-[var(--rule)] bg-paper py-2 shadow-[0_18px_44px_rgba(6,42,68,0.13)]">
+                      <div className="mt-2 overflow-hidden rounded-2xl border border-[rgba(6,42,68,0.07)] bg-white/90 py-2 shadow-[0_18px_44px_rgba(6,42,68,0.16)] backdrop-blur-xl">
                         {item.children.map((child) => (
                           <Link
                             key={child.slug}
                             href={`/services/${child.slug}/`}
-                            className="mi block px-5 py-3 text-ink transition-colors hover:bg-mist hover:text-aqua"
+                            className="mi block px-5 py-3 text-ink transition-colors hover:bg-[rgba(0,166,224,0.08)] hover:text-aqua"
                           >
                             {child.nav}
                           </Link>
                         ))}
-                        <div className="mx-5 my-2 h-px bg-[var(--rule)]" />
+                        <div className="mx-5 my-2 h-px bg-[rgba(6,42,68,0.09)]" />
                         <Link
                           href="/services/all-services/"
-                          className="mi block px-5 py-3 transition-colors hover:bg-mist hover:text-aqua"
-                          style={{ color: "var(--ink-3)" }}
+                          className="mi block px-5 py-3 text-ink/55 transition-colors hover:bg-[rgba(0,166,224,0.08)] hover:text-aqua"
                         >
                           All services
                         </Link>
@@ -180,14 +154,24 @@ export function Header() {
             })}
           </nav>
 
-          <div className="flex items-center gap-2">
-            <a href={site.phoneHref} className="btn btn-aqua lg:hidden !px-4 !py-2.5" aria-label={`Call ${site.phone}`}>
+          <div className="flex items-center gap-4">
+            {/* Plain bold text on desktop — one filled control in the bar. */}
+            <a
+              href={site.phoneHref}
+              className="mi-lg hidden xl:flex items-center gap-2 transition-colors hover:text-aqua"
+            >
+              <Phone size={15} />
+              {site.phone}
+            </a>
+
+            <a href={site.phoneHref} className="pill lg:hidden !px-4" aria-label={`Call ${site.phone}`}>
               <Phone size={14} />
               Call
             </a>
-            <Link href="/contact/#quote" className="btn btn-solid hidden sm:inline-flex">
-              Get a free quote
-              <Arrow size={14} />
+
+            <Link href="/contact/#quote" className="pill hidden sm:inline-flex">
+              Free quote
+              <Arrow size={13} />
             </Link>
 
             <button
@@ -195,13 +179,13 @@ export function Header() {
               onClick={() => setOpen((v) => !v)}
               aria-label={open ? "Close menu" : "Open menu"}
               aria-expanded={open}
-              className="lg:hidden ml-1 grid h-10 w-10 place-items-center"
+              className="lg:hidden grid h-10 w-10 place-items-center"
             >
               <span className="relative block h-[13px] w-[22px]">
                 {[0, 6, 12].map((top, i) => (
                   <span
                     key={top}
-                    className="absolute left-0 block h-px w-full bg-current transition-all duration-400"
+                    className="absolute left-0 block h-[2px] w-full rounded bg-current transition-all duration-300"
                     style={
                       open
                         ? {
@@ -220,26 +204,36 @@ export function Header() {
 
       {/* ── Mobile drawer ──────────────────────────────────────────────── */}
       <div
-        className={`fixed inset-0 z-40 lg:hidden transition-opacity duration-400 ${
+        className={`on-dark fixed inset-0 z-40 lg:hidden transition-opacity duration-400 ${
           open ? "opacity-100" : "pointer-events-none opacity-0"
         }`}
       >
-        <div className="absolute inset-0 bg-paper" />
-        <div className="relative h-full overflow-y-auto px-6 pb-10 pt-[74px]">
-          <nav className="flex flex-col">
+        <div className="absolute inset-0 bg-navy-deep" />
+        <div className="relative flex h-full flex-col overflow-y-auto px-6 pb-8 pt-[92px]">
+          <nav className="flex flex-col gap-1">
             {NAV.map((item) => (
-              <div key={item.href} className="border-b border-[var(--rule)]">
-                <Link href={item.href} className="dsp-sm block py-5 text-[26px]">
+              <div key={item.href}>
+                <Link
+                  href={item.href}
+                  className="dsp-sm block rounded-xl px-4 py-3.5 text-[22px] transition-colors hover:bg-white/[0.07]"
+                >
                   {item.label}
                 </Link>
                 {item.children && (
-                  <div className="-mt-1 pb-5 flex flex-col gap-3">
+                  <div className="mb-2 flex flex-col">
                     {item.children.map((child) => (
-                      <Link key={child.slug} href={`/services/${child.slug}/`} className="mi" style={{ color: "var(--ink-3)" }}>
+                      <Link
+                        key={child.slug}
+                        href={`/services/${child.slug}/`}
+                        className="mi rounded-lg px-4 py-2.5 text-white/50 transition-colors hover:bg-white/[0.07] hover:text-white"
+                      >
                         {child.nav}
                       </Link>
                     ))}
-                    <Link href="/services/all-services/" className="mi" style={{ color: "var(--ink-3)" }}>
+                    <Link
+                      href="/services/all-services/"
+                      className="mi rounded-lg px-4 py-2.5 text-white/50 transition-colors hover:bg-white/[0.07] hover:text-white"
+                    >
                       All services
                     </Link>
                   </div>
@@ -248,27 +242,73 @@ export function Header() {
             ))}
           </nav>
 
-          <div className="mt-8 flex flex-col gap-3">
-            <a href={site.phoneHref} className="btn btn-aqua w-full">
-              <Phone size={15} />
-              {site.phone}
-            </a>
-            <Link href="/contact/#quote" className="btn btn-solid w-full">
-              Get a free quote
-              <Arrow size={14} />
-            </Link>
-          </div>
+          <div className="mt-auto pt-8">
+            <div className="flex flex-col gap-2.5">
+              <a href={site.phoneHref} className="pill w-full !py-3.5">
+                <Phone size={15} />
+                {site.phone}
+              </a>
+              <Link href="/contact/#quote" className="pill pill-ghost w-full !py-3.5">
+                Get a free quote
+                <Arrow size={13} />
+              </Link>
+            </div>
 
-          <div className="mt-8 flex flex-col gap-2">
-            <a href={site.emailHref} className="mi" style={{ color: "var(--ink-3)" }}>
-              {site.email}
-            </a>
-            <span className="mi" style={{ color: "var(--ink-3)" }}>
-              {site.address.full}
-            </span>
+            <div className="mt-7 flex flex-col gap-3 border-t border-white/12 pt-6">
+              <a href={site.emailHref} className="mi flex items-center gap-2.5 text-white/55 transition-colors hover:text-white">
+                <Mail size={14} />
+                <span className="break-all">{site.email}</span>
+              </a>
+              <span className="mi flex items-center gap-2.5 text-white/55">
+                <Pin size={14} />
+                {site.address.full}
+              </span>
+              <a
+                href={site.facebook}
+                target="_blank"
+                rel="noreferrer noopener"
+                className="mi flex items-center gap-2.5 text-white/55 transition-colors hover:text-white"
+              >
+                <Facebook size={14} />
+                Follow us on Facebook
+              </a>
+            </div>
           </div>
         </div>
       </div>
     </>
+  );
+}
+
+/*
+ * The horizontal lockup — the wordmark and its subtitle, with the skyline
+ * cropped away. See scripts/images.mjs: the full 2:1 mark spends most of any
+ * header-sized height budget on the skyline and renders the company name about
+ * four pixels tall. At 44px this sets the name at roughly 28px cap-height.
+ */
+function Logo({
+  src,
+  scrolled,
+  className = "",
+  style,
+}: {
+  src: string;
+  scrolled: boolean;
+  className?: string;
+  style?: React.CSSProperties;
+}) {
+  return (
+    /* The export is unoptimised, so next/image would only add a wrapper. */
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src={asset(`/img/${src}`)}
+      alt={site.legalName}
+      width={894}
+      height={200}
+      className={`w-auto transition-[height,opacity] duration-400 ${
+        scrolled ? "h-[34px] lg:h-[38px]" : "h-[38px] lg:h-[44px]"
+      } ${className}`}
+      style={style}
+    />
   );
 }

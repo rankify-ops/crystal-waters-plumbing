@@ -81,13 +81,99 @@ for (const [src, slug] of PHOTOS) {
   console.log("photo", slug, `${meta.width}x${meta.height}`);
 }
 
-// Logo: the supplied wordmark, trimmed of its transparent margin so it can be
-// sized by height in the header without a mystery gap either side.
-await sharp("assets-raw/Crystal-Waters-Plumbing-Logo.pdf.png")
+/*
+ * THE LOGO, IN TWO VERSIONS
+ *
+ * The supplied file is three things stacked: a skyline drawn in thin BLACK
+ * strokes, "Crystal Waters" as a blue gradient wordmark with a white outline,
+ * and "PLUMBING & DRAINAGE" in BLACK type underneath.
+ *
+ * That means two thirds of it disappears on a dark ground — and the obvious
+ * CSS shortcut, `filter: brightness(0) invert(1)`, is worse than useless here:
+ * flattening everything to white merges the wordmark's fill, its white outline
+ * and its drop shadow into one solid mass, and the letters lose their counters.
+ * It rendered as an unreadable smear.
+ *
+ * So the dark-ground version is generated properly, per pixel: anything
+ * NEUTRAL and DARK — the skyline strokes, the subtitle, the wordmark's shadow —
+ * is repainted white, while anything saturated is left alone. The blue
+ * wordmark survives intact with its own white outline still separating it from
+ * the navy, and the recoloured drop shadow becomes a faint glow, which on a
+ * dark ground is doing the same job the shadow did on a light one.
+ *
+ * Both are trimmed of their transparent margin so the header can size them by
+ * height without a mystery gap either side.
+ */
+const logoSrc = await sharp("assets-raw/Crystal-Waters-Plumbing-Logo.pdf.png")
   .trim()
-  .resize(760, null, { withoutEnlargement: true })
-  .png({ compressionLevel: 9 })
-  .toFile(`${OUT}/logo.png`);
+  .toBuffer();
+
+/** Repaint every neutral, dark pixel white; leave the saturated blue alone. */
+async function forDarkGround(buffer) {
+  const { data, info } = await sharp(buffer)
+    .ensureAlpha()
+    .raw()
+    .toBuffer({ resolveWithObject: true });
+
+  const px = Buffer.from(data);
+  for (let i = 0; i < px.length; i += 4) {
+    if (px[i + 3] < 8) continue;
+    const r = px[i];
+    const g = px[i + 1];
+    const b = px[i + 2];
+    const max = Math.max(r, g, b);
+    const saturation = max === 0 ? 0 : (max - Math.min(r, g, b)) / max;
+    const luminance = 0.299 * r + 0.587 * g + 0.114 * b;
+    if (saturation < 0.28 && luminance < 150) {
+      px[i] = 255;
+      px[i + 1] = 255;
+      px[i + 2] = 255;
+    }
+  }
+  return sharp(px, {
+    raw: { width: info.width, height: info.height, channels: 4 },
+  });
+}
+
+/*
+ * TWO LOCKUPS, NOT ONE
+ *
+ * The full mark is 2:1 — the skyline occupies the top 55% of it, above the
+ * wordmark. A header sizes a logo by HEIGHT, so at any height a header can
+ * afford, the skyline eats the budget and the actual company name renders
+ * about four pixels tall. It was illegible.
+ *
+ * So the header gets a horizontal lockup: the same file cropped to the
+ * wordmark and its subtitle, which is roughly 4.5:1 and therefore sets the
+ * name three times larger in the same vertical space. The full mark with the
+ * skyline is kept for the footer, where there is room for it.
+ *
+ * The crop is measured, not guessed: row 248 is where saturated blue pixels
+ * first appear in the trimmed source, which is the top of the "C".
+ */
+const { height: logoH } = await sharp(logoSrc).metadata();
+const WORDMARK_TOP = 246;
+
+const wordmark = await sharp(logoSrc)
+  .extract({ left: 0, top: WORDMARK_TOP, width: 894, height: logoH - WORDMARK_TOP })
+  .trim()
+  .toBuffer();
+
+for (const [buf, name] of [
+  [logoSrc, "logo"],
+  [wordmark, "logo-mark"],
+]) {
+  await sharp(buf)
+    .resize(900, null, { withoutEnlargement: true })
+    .png({ compressionLevel: 9 })
+    .toFile(`${OUT}/${name}.png`);
+
+  await (await forDarkGround(buf))
+    .resize(900, null, { withoutEnlargement: true })
+    .png({ compressionLevel: 9 })
+    .toFile(`${OUT}/${name}-dark.png`);
+}
+console.log("logo, logo-mark (+ dark variants)");
 
 // Favicon, from the same mark.
 for (const size of [32, 180, 192, 512]) {

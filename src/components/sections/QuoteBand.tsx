@@ -46,7 +46,7 @@ export function QuoteBand({
 
             <Reveal delay={200} className="mt-11 flex flex-col gap-5 border-t border-[var(--rule)] pt-9">
               <a href={site.phoneHref} className="group flex items-center gap-4">
-                <span className="grid h-10 w-10 shrink-0 place-items-center border border-[var(--rule)] transition-colors group-hover:border-[var(--aqua-bright)] group-hover:text-[var(--aqua-bright)]">
+                <span className="chip chip-sm">
                   <Phone size={16} />
                 </span>
                 <span>
@@ -57,7 +57,7 @@ export function QuoteBand({
                 </span>
               </a>
               <a href={site.emailHref} className="group flex items-center gap-4">
-                <span className="grid h-10 w-10 shrink-0 place-items-center border border-[var(--rule)] transition-colors group-hover:border-[var(--aqua-bright)] group-hover:text-[var(--aqua-bright)]">
+                <span className="chip chip-sm">
                   <Mail size={16} />
                 </span>
                 <span className="min-w-0">
@@ -70,7 +70,7 @@ export function QuoteBand({
                 </span>
               </a>
               <div className="flex items-center gap-4">
-                <span className="grid h-10 w-10 shrink-0 place-items-center border border-[var(--rule)]">
+                <span className="chip chip-sm">
                   <Pin size={16} />
                 </span>
                 <span>
@@ -81,7 +81,7 @@ export function QuoteBand({
                 </span>
               </div>
               <div className="flex items-center gap-4">
-                <span className="grid h-10 w-10 shrink-0 place-items-center border border-[var(--rule)]">
+                <span className="chip chip-sm">
                   <Clock size={16} />
                 </span>
                 <span>

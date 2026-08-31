@@ -2,7 +2,12 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { site } from "@/content/site";
-import { Tap, Cylinder, Camera, Drip, Phone, Arrow, Clock } from "@/components/ui/Icons";
+import {
+  Bath, Cylinder, Drain, Drip, Flame, Chat,
+  Alert, Calendar, Clock, Tag,
+  House, Apartment, Shopfront, BodyCorporate,
+  Phone, Arrow,
+} from "@/components/ui/Icons";
 
 /*
  * The multi-stage quote form.
@@ -33,32 +38,41 @@ import { Tap, Cylinder, Camera, Drip, Phone, Arrow, Clock } from "@/components/u
 
 const ACCESS_KEY = process.env.NEXT_PUBLIC_WEB3FORMS_KEY || "";
 
-type Option = { value: string; label: string; note?: string; Icon?: typeof Tap };
+/*
+ * Every option carries an icon — all three questions, not just the first.
+ *
+ * The earlier version iconned four of the six job types and left the urgency
+ * and property questions bare, which made those two screens read as a
+ * different, lesser form. A tap target with a picture on it is also simply
+ * easier to hit correctly at a glance on a phone, which is where most of these
+ * get filled in.
+ */
+type Option = { value: string; label: string; note?: string; Icon: typeof Bath };
 
 const JOB: Option[] = [
-  { value: "Blocked drain", label: "Blocked drain", note: "Sink, toilet, shower or main line", Icon: Camera },
+  { value: "Blocked drain", label: "Blocked drain", note: "Sink, toilet, shower or main line", Icon: Drain },
   { value: "Hot water", label: "Hot water", note: "No hot water, or time to replace", Icon: Cylinder },
   { value: "Leak or burst pipe", label: "Leak or burst pipe", note: "Including hidden and underground", Icon: Drip },
-  { value: "Kitchen or bathroom", label: "Kitchen or bathroom", note: "Renovation, upgrade or fit-off", Icon: Tap },
-  { value: "Gas", label: "Gas fitting or gas leak" },
-  { value: "Something else", label: "Something else" },
+  { value: "Kitchen or bathroom", label: "Kitchen or bathroom", note: "Renovation, upgrade or fit-off", Icon: Bath },
+  { value: "Gas", label: "Gas fitting or gas leak", note: "Appliances, lines and leaks", Icon: Flame },
+  { value: "Something else", label: "Something else", note: "Tell us and we will sort it", Icon: Chat },
 ];
 
 /* Referenced in three places, so it is named once rather than typed out. */
 const EMERGENCY = "Emergency — today";
 
 const URGENCY: Option[] = [
-  { value: EMERGENCY, label: "Emergency", note: "Water is going somewhere it should not" },
-  { value: "This week", label: "This week" },
-  { value: "Next few weeks", label: "Next few weeks" },
-  { value: "Just getting a price", label: "Just getting a price" },
+  { value: EMERGENCY, label: "Emergency", note: "Water is going somewhere it should not", Icon: Alert },
+  { value: "This week", label: "This week", note: "Booked in within a few days", Icon: Calendar },
+  { value: "Next few weeks", label: "Next few weeks", note: "No rush, but it needs doing", Icon: Clock },
+  { value: "Just getting a price", label: "Just getting a price", note: "Planning, or comparing quotes", Icon: Tag },
 ];
 
 const PROPERTY: Option[] = [
-  { value: "House", label: "House" },
-  { value: "Unit or apartment", label: "Unit or apartment" },
-  { value: "Commercial", label: "Commercial" },
-  { value: "Body corporate", label: "Body corporate" },
+  { value: "House", label: "House", Icon: House },
+  { value: "Unit or apartment", label: "Unit or apartment", Icon: Apartment },
+  { value: "Commercial", label: "Commercial", Icon: Shopfront },
+  { value: "Body corporate", label: "Body corporate", Icon: BodyCorporate },
 ];
 
 const STEPS = ["What is the job?", "How urgent?", "Property type", "Your details"];
@@ -174,8 +188,8 @@ export function QuoteForm({
   /* ── Done ──────────────────────────────────────────────────────────── */
   if (status === "done") {
     return (
-      <div className={`border border-[var(--rule)] bg-paper p-8 md:p-11 ${className}`} id="quote">
-        <div className="mb-7 h-[3px] w-full bg-[var(--rule)]">
+      <div className={`rounded-3xl border border-[var(--rule)] bg-paper p-8 shadow-[0_18px_50px_rgba(6,42,68,0.10)] md:p-11 ${className}`} id="quote">
+        <div className="mb-7 h-[4px] w-full overflow-hidden rounded-full bg-[var(--rule)]">
           <div className="h-full bg-aqua" style={{ width: "100%" }} />
         </div>
         <div className="py-6 text-center">
@@ -190,7 +204,7 @@ export function QuoteForm({
               ? "You flagged this as urgent, so if you have not heard from us in the next few minutes, please call — that is the fastest way to reach us."
               : "A member of the team will call you back to talk it through and give you a price. No call-out fee, and nothing starts until you approve the number."}
           </p>
-          <a href={site.phoneHref} className="btn btn-aqua mt-8">
+          <a href={site.phoneHref} className="pill mt-8">
             <Phone size={15} />
             {site.phone}
           </a>
@@ -201,7 +215,7 @@ export function QuoteForm({
 
   /* ── Form ──────────────────────────────────────────────────────────── */
   return (
-    <div className={`border border-[var(--rule)] bg-paper p-6 sm:p-8 md:p-10 ${className}`} id="quote">
+    <div className={`rounded-3xl border border-[var(--rule)] bg-paper p-6 shadow-[0_18px_50px_rgba(6,42,68,0.10)] sm:p-8 md:p-10 ${className}`} id="quote">
       <div className="mb-1 flex items-baseline justify-between gap-4">
         <h3 className="dsp-sm text-[21px] md:text-[24px]">Get a free quote</h3>
         <span className="mi shrink-0" style={{ color: "var(--ink-3)" }}>
@@ -212,7 +226,7 @@ export function QuoteForm({
 
       {/* Progress. One continuous bar rather than four pips — pips imply the
           steps are equal in effort, and the last one is not. */}
-      <div className="mb-8 h-[3px] w-full bg-[var(--rule)]">
+      <div className="mb-8 h-[4px] w-full overflow-hidden rounded-full bg-[var(--rule)]">
         <div
           className="h-full bg-aqua transition-[width] duration-500"
           style={{ width: `${Math.max(progress, 0.06) * 100}%` }}
@@ -242,13 +256,13 @@ export function QuoteForm({
             {/* Selecting "Emergency" holds the form here (see choose()) and
                 offers the phone instead of question three. */}
             {emergency && (
-              <div className="mt-4 border border-aqua bg-aqua/[0.07] p-5">
+              <div className="mt-4 rounded-2xl border border-aqua bg-aqua/[0.07] p-5">
                 <p className="bd-sm text-ink">
                   If water is actively going somewhere it should not, ring us
                   rather than filling this in — we will get someone moving while
                   we are still on the phone.
                 </p>
-                <a href={site.phoneHref} className="btn btn-aqua mt-4 w-full">
+                <a href={site.phoneHref} className="pill mt-4 w-full !py-3.5">
                   <Phone size={15} />
                   Call now — {site.phone}
                 </a>
@@ -292,13 +306,13 @@ export function QuoteForm({
                   onChange={(e) => setFields((f) => ({ ...f, message: e.target.value }))}
                   placeholder="Anything else we should know? (optional)"
                   rows={3}
-                  className="bd w-full resize-none border border-[var(--rule)] bg-paper px-4 py-3.5 text-ink outline-none transition-colors placeholder:text-[var(--ink-3)] focus:border-aqua"
+                  className="bd w-full resize-none rounded-2xl border border-[var(--rule)] bg-paper px-4 py-3.5 text-ink outline-none transition-colors placeholder:text-[var(--ink-3)] focus:border-aqua"
                 />
               </label>
 
               <input ref={honeypot} type="text" name="_honey" tabIndex={-1} autoComplete="off" aria-hidden="true" className="absolute -left-[9999px] h-px w-px opacity-0" />
 
-              <button type="submit" disabled={!canSubmit || status === "sending"} className="btn btn-solid mt-2 w-full disabled:cursor-not-allowed disabled:opacity-45">
+              <button type="submit" disabled={!canSubmit || status === "sending"} className="pill mt-2 w-full !py-4 disabled:cursor-not-allowed disabled:opacity-45">
                 {status === "sending" ? "Sending…" : "Request my quote"}
                 {status !== "sending" && <Arrow size={14} />}
               </button>
@@ -365,17 +379,17 @@ function Choice({
       type="button"
       onClick={onSelect}
       aria-pressed={selected}
-      className={`group flex items-center gap-3.5 border px-4 py-4 text-left transition-all duration-300 ${
+      className={`group flex items-center gap-4 rounded-2xl border px-4 py-4 text-left transition-all duration-300 ${
         selected
-          ? "border-aqua bg-aqua/[0.07]"
-          : "border-[var(--rule)] hover:border-[var(--ink-3)] hover:bg-mist"
-      } ${row ? "" : "sm:min-h-[74px]"}`}
+          ? "border-aqua bg-aqua/[0.06] shadow-[0_6px_18px_rgba(0,166,224,0.14)]"
+          : "border-[var(--rule)] hover:border-aqua/45 hover:bg-aqua/[0.03]"
+      } ${row ? "" : "sm:min-h-[80px]"}`}
     >
-      {Icon && (
-        <span className={`shrink-0 transition-colors ${selected ? "text-aqua" : "text-[var(--ink-3)] group-hover:text-ink"}`}>
-          <Icon size={22} />
-        </span>
-      )}
+      {/* The chip fills on select and on hover, so the whole tile answers the
+          pointer rather than just its border. */}
+      <span className={`chip chip-sm ${selected ? "chip-on" : ""}`}>
+        <Icon size={20} />
+      </span>
       <span className="min-w-0">
         <span className="mi-lg block text-ink">{option.label}</span>
         {option.note && (
@@ -411,7 +425,7 @@ function Field({
         placeholder={label}
         autoComplete={autoComplete}
         required={required}
-        className="bd w-full border border-[var(--rule)] bg-paper px-4 py-3.5 text-ink outline-none transition-colors placeholder:text-[var(--ink-3)] focus:border-aqua"
+        className="bd w-full rounded-2xl border border-[var(--rule)] bg-paper px-4 py-3.5 text-ink outline-none transition-colors placeholder:text-[var(--ink-3)] focus:border-aqua"
       />
     </label>
   );

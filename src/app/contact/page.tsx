@@ -136,7 +136,7 @@ function Card({
 }) {
   const inner = (
     <>
-      <span className="grid h-11 w-11 place-items-center border border-[var(--rule)] text-aqua">{icon}</span>
+      <span className="chip chip-lg">{icon}</span>
       <span className="mi mt-6 block" style={{ color: "var(--ink-3)" }}>
         {label}
       </span>
@@ -149,6 +149,7 @@ function Card({
     first ? "" : "border-t border-[var(--rule)] md:border-l md:border-t-0"
   }`;
 
+  // `group` so the chip fills on hover — see the rule in globals.css.
   return href ? (
     <a href={href} className={`${cls} group transition-colors hover:bg-mist`}>
       {inner}

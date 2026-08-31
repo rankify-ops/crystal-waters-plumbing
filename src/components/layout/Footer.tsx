@@ -62,15 +62,16 @@ export function Footer() {
       <div className="wrap py-16 md:py-20">
         <div className="grid gap-12 md:grid-cols-12">
           <div className="md:col-span-4">
+            {/* The generated dark-ground variant, not a CSS filter — see
+                scripts/images.mjs. */}
             {/* eslint-disable-next-line @next/next/no-img-element -- the export
                 is unoptimised, so next/image would only add a wrapper. */}
             <img
-              src={asset("/img/logo.png")}
+              src={asset("/img/logo-dark.png")}
               alt={site.legalName}
               width={190}
-              height={44}
-              className="h-9 w-auto"
-              style={{ filter: "brightness(0) invert(1)" }}
+              height={95}
+              className="h-12 w-auto"
             />
             <p className="bd-sm mt-6 max-w-[320px]">
               Your local community plumbing and drainage specialist, based in
