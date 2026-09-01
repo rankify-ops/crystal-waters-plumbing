@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Hero } from "@/components/sections/Hero";
 import { Pillars } from "@/components/sections/Pillars";
+import { Benefits } from "@/components/sections/Benefits";
 import { ServicesGrid } from "@/components/sections/ServicesGrid";
 import { Process } from "@/components/sections/Process";
 import { Reviews } from "@/components/sections/Reviews";
@@ -14,8 +15,10 @@ export default function Home() {
   return (
     <>
       <Hero />
-      <Pillars />
+      {/* Straddles the hero's bottom edge — see Benefits.tsx. */}
+      <Benefits />
       <ServicesGrid />
+      <Pillars />
       <Intro />
       <Process />
       <Reviews limit={6} />

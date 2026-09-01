@@ -2,7 +2,7 @@ import Link from "next/link";
 import { site, yearsTrading } from "@/content/site";
 import { Photo } from "@/components/ui/Photo";
 import { Reveal } from "@/components/ui/Reveal";
-import { Phone, Arrow, Google, Spanner, Shield, Tag } from "@/components/ui/Icons";
+import { Phone, Arrow } from "@/components/ui/Icons";
 import { QuoteLink } from "@/components/ui/QuoteLink";
 import { QuoteForm } from "@/components/quote/QuoteForm";
 
@@ -93,7 +93,7 @@ export function Hero() {
           stacks under the copy, which costs nothing.
         */}
         <div className="grid gap-12 xl:grid-cols-12">
-          <div className="xl:order-1 xl:col-span-7">
+          <div className="xl:col-span-7">
           <Reveal className="mb-6">
             <span className="hero-tag">
               <span className="relative flex h-1.5 w-1.5">
@@ -164,38 +164,6 @@ export function Hero() {
           </div>
 
           {/*
-            The four proof points, BELOW both columns and spanning the full
-            container — a single row of four, as Prime Group has them.
-
-            They cannot live in the copy column: squeezed into the seven columns
-            beside the form, four across would be about 150px each, narrower than
-            their own labels. Out here each one gets roughly 284px.
-
-            2x2 on a phone, one row from lg. In the DOM they sit BETWEEN the
-            copy and the form, so a phone reads copy -> proof -> form; on xl the
-            order classes put the form back beside the copy and drop the cards
-            onto their own full-width row underneath.
-          */}
-          <Reveal delay={420} className="mt-9 grid auto-rows-fr grid-cols-2 gap-2.5 lg:flex xl:order-3 xl:col-span-12">
-            {[
-              { mark: <Google size={22} />, value: site.reviews.rating, label: `${site.reviews.count}+ Google reviews` },
-              { mark: <Spanner size={21} />, value: "25+", label: "Years experience" },
-              { mark: <Shield size={21} />, value: "Lifetime", label: "Workmanship warranty" },
-              { mark: <Tag size={21} />, value: "$0", label: "Call-out fee, ever" },
-            ].map((s) => (
-              <div key={s.label} className="hero-card lg:flex-1">
-                <span className="grid h-7 w-7 flex-none place-items-center text-white">
-                  {s.mark}
-                </span>
-                <span className="min-w-0">
-                  <span className="hero-card-val block">{s.value}</span>
-                  <span className="hero-card-label mt-1 block">{s.label}</span>
-                </span>
-              </div>
-            ))}
-          </Reveal>
-
-          {/*
             The quote form, in the hero rather than only halfway down the page.
 
             It carries id="quote", so every "get a free quote" control now
@@ -203,7 +171,7 @@ export function Hero() {
             two copies would have meant two elements sharing one id, and the
             scroll target would have been whichever the browser found first.
           */}
-          <Reveal delay={200} className="on-light xl:order-2 xl:col-span-5">
+          <Reveal delay={200} className="on-light xl:col-span-5">
             <QuoteForm />
           </Reveal>
         </div>
