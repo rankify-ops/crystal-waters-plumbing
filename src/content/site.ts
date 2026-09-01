@@ -44,10 +44,17 @@ export const site = {
 
   serviceArea: "Palm Beach to Helensvale and everything in between",
 
-  /* Straight off the Trustindex widget the old site embedded. */
+  /*
+   * Count is off the Trustindex widget the old site embedded. Rating is the
+   * client's own correction — the widget read 4.9, they are a straight 5.
+   *
+   * A string, not a number, so it renders as "5.0" rather than "5". Google
+   * shows one decimal and this sits next to a Google mark and five stars; "5"
+   * on its own reads as a hand-written claim rather than a pulled figure.
+   */
   reviews: {
     count: 205,
-    rating: 4.9,
+    rating: "5.0",
     writeUrl:
       "https://admin.trustindex.io/api/googleWriteReview?place-id=ChIJT9R40fwDkWsR1SQJP4QSWb0",
   },
