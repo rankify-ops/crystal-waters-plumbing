@@ -307,6 +307,19 @@ body {
   color: #fff;
 }
 
+/*
+ * The long-headline variant.
+ *
+ * Same weight, leading and tracking as .hero-h1 — only the ceiling changes,
+ * 57.6px down to 46px. The GHP ceiling is tuned for a short headline broken
+ * with a <br>; the client's own line is about three times as long and hit
+ * four lines in a 653px column at that size. The vw factor drops with it so
+ * the two meet at roughly the same viewport.
+ */
+.hero-h1-long {
+  font-size: clamp(25px, 5.2vw, 46px);
+}
+
 .hero-sub {
   font-size: 16.8px;
   line-height: 1.7;

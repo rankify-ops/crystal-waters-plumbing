@@ -2,18 +2,21 @@ import Link from "next/link";
 import { site, yearsTrading } from "@/content/site";
 import { Photo } from "@/components/ui/Photo";
 import { Reveal } from "@/components/ui/Reveal";
-import { Phone, Arrow } from "@/components/ui/Icons";
+import { Phone, Arrow, Star, Google } from "@/components/ui/Icons";
 import { QuoteLink } from "@/components/ui/QuoteLink";
 import { QuoteForm } from "@/components/quote/QuoteForm";
 
 /*
  * The home hero.
  *
- * The old site opened on the headline "Your Neighborhood's Plumbing Experts:
- * Your Satisfaction, Our Guarantee", which is a sentence that could sit on any
- * plumber's website in the country. This one says what they do and where, and
- * puts the two things people are actually deciding between — call now, or get
- * a price — in front of everything else.
+ * HEADLINE is the client's own, carried over from the WordPress site: "Your
+ * Neighborhood's Plumbing Experts: Your Satisfaction, Our Guarantee", with the
+ * spelling normalised to Australian. An earlier pass here replaced it with
+ * "Gold Coast plumbing & drainage" on the grounds that the original could sit
+ * on any plumber's website in the country; the client's call was to keep their
+ * line, and it is theirs to make. The service-and-suburb detail that argument
+ * was about now lives in the sub-heading directly underneath, so the page still
+ * says what they do and where inside the first screen.
  *
  * WHICH PHOTOGRAPH is decided in scripts/images.mjs, and that note is worth
  * reading before swapping it: the library has no usable wide shot of the team
@@ -94,7 +97,13 @@ export function Hero() {
         */}
         <div className="grid gap-12 xl:grid-cols-12">
           <div className="xl:col-span-7">
-          <Reveal className="mb-6">
+          {/*
+            The availability pill and the rating share one row — the slot the
+            "Est. 2018 · Robina" line used to occupy. Two separate rows of
+            micro-type above the headline would push it most of a line further
+            down for no gain.
+          */}
+          <Reveal className="mb-6 flex flex-wrap items-center gap-x-4 gap-y-3">
             <span className="hero-tag">
               <span className="relative flex h-1.5 w-1.5">
                 <span className="ping absolute inline-flex h-full w-full rounded-full bg-[var(--aqua-bright)] opacity-70" />
@@ -102,21 +111,38 @@ export function Hero() {
               </span>
               Same-day call-outs available
             </span>
+
+            <span className="flex items-center gap-2.5">
+              <Google size={17} />
+              <span className="stars flex gap-0.5">
+                {Array.from({ length: 5 }, (_, i) => (
+                  <Star key={i} size={14} />
+                ))}
+              </span>
+              <span className="text-[12.8px] font-semibold text-white/80">
+                {site.reviews.rating} from {site.reviews.count}+ reviews
+              </span>
+            </span>
           </Reveal>
 
           {/*
-            SENTENCE CASE at weight 800 — the one big departure from the rest
-            of this site, and the change that does most of the work. Uppercase
-            at 600 with heavy negative tracking reads as an engineering
-            drawing; this reads as a person talking. Sizing is GHP's
-            clamp(2.6rem, 5vw, 3.6rem) converted to px.
+            The client's own headline, restored from the WordPress site — with
+            "Neighborhood" normalised to the Australian spelling, as everywhere
+            else in content/site.ts.
+
+            It is roughly three times the length of "Gold Coast plumbing &
+            drainage", so the size cap comes down with it: at the 57.6px GHP
+            ceiling this ran to four lines in a 653px column and swallowed the
+            hero. `.hero-h1-long` is the same weight, leading and tracking at a
+            46px cap. The nowrap is gone too — it existed to keep a two-word
+            trade name intact, and there is nothing here that must not break.
           */}
-          <h1 className="hero-h1 mb-[18px]">
+          <h1 className="hero-h1 hero-h1-long mb-[18px]">
             <Reveal variant="mask">
-              <span>Gold Coast</span>
+              <span>Your neighbourhood&rsquo;s plumbing experts:</span>
             </Reveal>
             <Reveal variant="mask" delay={90}>
-              <span className="hi whitespace-nowrap">plumbing &amp; drainage</span>
+              <span className="hi">your satisfaction, our guarantee</span>
             </Reveal>
           </h1>
 
