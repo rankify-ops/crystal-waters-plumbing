@@ -58,11 +58,17 @@ const JOB: Option[] = [
   { value: "Something else", label: "Something else", note: "Tell us and we will sort it", Icon: Chat },
 ];
 
-/* Referenced in three places, so it is named once rather than typed out. */
-const EMERGENCY = "Emergency — today";
+/*
+ * Referenced in four places, so it is named once. It had been named once and
+ * then typed out again twice — the "is this an emergency" check and the email
+ * subject both compared against the literal string. Renaming the option would
+ * have silently disabled the hold-and-offer-the-phone behaviour and dropped
+ * the URGENT prefix, with nothing failing to show for it.
+ */
+const EMERGENCY = "Emergency / ASAP";
 
 const URGENCY: Option[] = [
-  { value: EMERGENCY, label: "Emergency", note: "Water is going somewhere it should not", Icon: Alert },
+  { value: EMERGENCY, label: "Emergency / ASAP", note: "Water is going somewhere it should not", Icon: Alert },
   { value: "This week", label: "This week", note: "Booked in within a few days", Icon: Calendar },
   { value: "Next few weeks", label: "Next few weeks", note: "No rush, but it needs doing", Icon: Clock },
   { value: "Just getting a price", label: "Just getting a price", note: "Planning, or comparing quotes", Icon: Tag },
@@ -112,7 +118,7 @@ export function QuoteForm({
   const panelRef = useRef<HTMLDivElement>(null);
   const firstRender = useRef(true);
 
-  const emergency = answers.urgency === "Emergency — today";
+  const emergency = answers.urgency === EMERGENCY;
 
   // Move focus to the new question on each advance, so a screen reader and a
   // keyboard user both land where a sighted user is already looking. Skipped on
@@ -169,7 +175,7 @@ export function QuoteForm({
         headers: { "Content-Type": "application/json", Accept: "application/json" },
         body: JSON.stringify({
           access_key: ACCESS_KEY,
-          subject: `${answers.urgency === "Emergency — today" ? "URGENT — " : ""}Quote request: ${answers.job || "Plumbing"} (${fields.suburb})`,
+          subject: `${emergency ? "URGENT — " : ""}Quote request: ${answers.job || "Plumbing"} (${fields.suburb})`,
           from_name: "crystalwatersplumbing.com.au",
           name: fields.name,
           phone: fields.phone,
