@@ -52,7 +52,22 @@ const ITEMS = [
 export function Benefits() {
   return (
     <section className="relative z-[2] -mt-8 md:-mt-12">
-      <div className="wrap">
+      {/*
+        The ground behind the card, and why it is a layer rather than a
+        background on the section.
+
+        The section is pulled UP over the hero by the negative margin, so a
+        background on the section itself would paint over the bottom of the
+        hero photograph and kill the straddle. This layer is inset from the top
+        by exactly the amount of that pull — top-8 against -mt-8, md:top-12
+        against md:-mt-12 — so it begins on the hero's bottom edge, not above it.
+
+        Mist, because the section immediately below (ServicesGrid) is bg-mist.
+        Left transparent it fell through to the body white and read as a white
+        band wedged between the photograph and the mist section.
+      */}
+      <div className="absolute inset-x-0 bottom-0 top-8 bg-mist md:top-12" aria-hidden="true" />
+      <div className="wrap relative">
         <div className="grid overflow-hidden rounded-2xl bg-paper shadow-[0_8px_32px_rgba(6,42,68,0.10)] sm:grid-cols-2 lg:grid-cols-4">
           {ITEMS.map(({ Icon, title, body }, i) => (
             <Reveal
