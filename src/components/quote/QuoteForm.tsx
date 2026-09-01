@@ -23,10 +23,13 @@ import {
  *   - Selecting an option ADVANCES. Tintek's version required select-then-Next,
  *     which is two taps for one decision on every question.
  *   - Urgency comes second, not third. For a plumber it is the field that
- *     changes what happens next — a burst pipe should reach a phone, not an
- *     inbox — so it is asked while the form still has the person's attention,
- *     and an "emergency" answer surfaces the phone number immediately rather
- *     than waiting for the thank-you screen.
+ *     changes what happens next, so it is asked while the form still has the
+ *     person's attention. An "emergency" answer tags the email subject URGENT
+ *     so it is triaged on arrival — but it does NOT interrupt the form. That
+ *     was tried: choosing it held the panel and offered the phone instead of
+ *     question three. Someone who has chosen to type rather than ring has
+ *     already made that decision, and being stopped and asked again reads as
+ *     the form refusing to take the job.
  *   - Back is a single control in the progress row, not a button per step.
  *
  * Submission goes to Web3Forms, which is what the other Rankify plumbing builds
@@ -59,11 +62,9 @@ const JOB: Option[] = [
 ];
 
 /*
- * Referenced in four places, so it is named once. It had been named once and
- * then typed out again twice — the "is this an emergency" check and the email
- * subject both compared against the literal string. Renaming the option would
- * have silently disabled the hold-and-offer-the-phone behaviour and dropped
- * the URGENT prefix, with nothing failing to show for it.
+ * Named once rather than typed out at each use. It had been named once and then
+ * repeated as a literal, so renaming the option silently dropped the URGENT
+ * subject prefix with nothing failing to show for it.
  */
 const EMERGENCY = "Emergency / ASAP";
 
@@ -133,13 +134,6 @@ export function QuoteForm({
 
   function choose(key: string, value: string) {
     setAnswers((a) => ({ ...a, [key]: value }));
-
-    // "Emergency" is the one answer that should stop the form rather than
-    // advance it. Somebody with water coming through a ceiling is better served
-    // by a phone number than by three more questions, so the panel holds and
-    // offers the call — with a way to carry on for anyone who would still
-    // rather type it out.
-    if (key === "urgency" && value === EMERGENCY) return;
 
     // A short beat otherwise, so the selected state is visible before the panel
     // changes. Without it the answer appears to have been ignored.
@@ -300,30 +294,6 @@ export function QuoteForm({
                 <Choice key={o.value} option={o} selected={answers.urgency === o.value} onSelect={() => choose("urgency", o.value)} row />
               ))}
             </div>
-            {/* Selecting "Emergency" holds the form here (see choose()) and
-                offers the phone instead of question three. */}
-            {emergency && (
-              <div className="mt-4 rounded-2xl border border-aqua bg-aqua/[0.07] p-5">
-                <p className="bd-sm text-ink">
-                  If water is actively going somewhere it should not, ring us
-                  rather than filling this in — we will get someone moving while
-                  we are still on the phone.
-                </p>
-                <a href={site.phoneHref} className="pill mt-4 w-full !py-3.5">
-                  <Phone size={15} />
-                  Call now — {site.phone}
-                </a>
-                <button
-                  type="button"
-                  onClick={() => setStep(2)}
-                  className="mi mt-4 inline-flex w-full items-center justify-center gap-2 transition-colors hover:text-aqua"
-                  style={{ color: "var(--ink-3)" }}
-                >
-                  Or finish the form instead
-                  <Arrow size={13} />
-                </button>
-              </div>
-            )}
           </Panel>
         )}
 
