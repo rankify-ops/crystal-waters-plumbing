@@ -39,22 +39,12 @@ jobs:
       - run: npm install --no-audit --no-fund
 
       - name: Build static export
-        # ── CUTOVER ──────────────────────────────────────────────────────
-        # While previewing on the rankifyops.github.io/<repo>/ project URL,
-        # NEXT_PUBLIC_BASE_PATH must be set. When crystalwatersplumbing.com.au
-        # is pointed at Pages, two things change together:
-        #   1. delete the `env:` block below, and
-        #   2. add public/CNAME containing crystalwatersplumbing.com.au
-        # Doing only one of them breaks the site — a CNAME with a basePath
-        # still serves every asset from /<repo>/ on the apex domain.
-        #
-        # NEXT_PUBLIC_BASE_PATH must be set HERE, not just in next.config.
-        # It is read at build time and inlined into the client bundle; if it is
-        # missing the build still succeeds and silently falls back to "", and
-        # every asset 404s on the project URL. Verify by grepping the shipped
-        # bundle for the prefix, not by trusting a green build.
-        env:
-          NEXT_PUBLIC_BASE_PATH: /${{ github.event.repository.name }}
+        # The site serves from the apex of crystalwatersplumbing.com.au, so there
+        # is no basePath. public/CNAME is what claims the domain on GitHub's
+        # side; the two go together. Setting NEXT_PUBLIC_BASE_PATH here again
+        # would serve every asset from /crystal-waters-plumbing/ on the apex,
+        # which renders the site completely unstyled while the build stays
+        # green — so verify the shipped bundle, not the workflow result.
         run: npm run build
 
       - name: Disable Jekyll
