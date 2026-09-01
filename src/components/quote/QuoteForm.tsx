@@ -278,7 +278,7 @@ export function QuoteForm({
         {/* Step 1 — job */}
         {step === 0 && (
           <Panel heading="What do you need done?" sub="Pick whichever is closest.">
-            <div className="grid gap-2.5 @[22rem]:grid-cols-2">
+            <div className="grid auto-rows-fr grid-cols-2 gap-2.5">
               {JOB.map((o) => (
                 <Choice key={o.value} option={o} selected={answers.job === o.value} onSelect={() => choose("job", o.value)} />
               ))}
@@ -324,7 +324,7 @@ export function QuoteForm({
         {/* Step 3 — property */}
         {step === 2 && (
           <Panel heading="What sort of property?" sub="Units and body corporate jobs have their own paperwork.">
-            <div className="grid gap-2.5 @[22rem]:grid-cols-2">
+            <div className="grid auto-rows-fr grid-cols-2 gap-2.5">
               {PROPERTY.map((o) => (
                 <Choice key={o.value} option={o} selected={answers.property === o.value} onSelect={() => choose("property", o.value)} />
               ))}
@@ -447,7 +447,16 @@ function Choice({
       type="button"
       onClick={onSelect}
       aria-pressed={selected}
-      className={`group flex items-center gap-4 rounded-2xl border px-4 py-4 text-left transition-all duration-300 ${
+      /*
+       * STACKED below 24rem, side-by-side above it.
+       *
+       * Two columns inside a 295px card leaves each tile about 142px. Laid out
+       * horizontally that is 26px of padding plus a 38px chip plus a gap, so
+       * the label gets roughly 74px — "GAS FITTING OR GAS LEAK" came out three
+       * lines. Stacking the chip above the label hands the label the whole
+       * 116px instead, which is what makes two columns work on a phone at all.
+       */
+      className={`group flex flex-col items-start gap-2.5 rounded-2xl border px-3 py-3.5 text-left transition-all duration-300 @[24rem]:flex-row @[24rem]:items-center @[24rem]:gap-4 @[24rem]:px-4 @[24rem]:py-4 ${
         selected
           ? "border-aqua bg-aqua/[0.06] shadow-[0_6px_18px_rgba(0,166,224,0.14)]"
           : "border-[var(--rule)] hover:border-aqua/45 hover:bg-aqua/[0.03]"
