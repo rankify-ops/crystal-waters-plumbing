@@ -362,6 +362,21 @@ body {
   line-height: 1.35;
 }
 
+/*
+ * nowrap only where the cards are a ROW OF FOUR.
+ *
+ * Prime Group sets white-space:nowrap on its .hg-label, and in a four-across
+ * row it matters: without it "Workmanship warranty" wraps while the other
+ * three do not and one card ends up taller. But on a phone the same cards are
+ * two-up at 163px, and there nowrap does not wrap the label — it CLIPS it.
+ * Measured: two of the four were overflowing their own card.
+ */
+@media (min-width: 1024px) {
+  .hero-card-label {
+    white-space: nowrap;
+  }
+}
+
 /* Nav links: sentence case at 13.9px/600, not 11px uppercase micro-type. */
 .navlink {
   font-size: 13.9px;

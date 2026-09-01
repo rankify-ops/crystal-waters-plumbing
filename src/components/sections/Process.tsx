@@ -37,7 +37,11 @@ export function Process() {
                 leave you knowing your plumbing is in expert hands.
               </p>
             </Reveal>
-            <Reveal delay={200} className="mt-10 hidden lg:block">
+            {/* Was hidden below lg. A photograph of Nick actually on the job
+                is the only face the page has above the team section, and it is
+                doing more for trust than anything else in this column — so it
+                shows at every width now. */}
+            <Reveal delay={200} className="mt-10">
               <div className="plate aspect-[4/5]">
                 <Photo
                   name="nick-shower-rough-in"

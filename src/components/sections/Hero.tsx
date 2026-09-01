@@ -30,9 +30,19 @@ import { QuoteForm } from "@/components/quote/QuoteForm";
  * mid-word on a phone) and the two-column button grid below sm (theirs lets
  * the buttons run at natural width, which left them misaligned with the cards).
  */
+/*
+ * NO min-height on the section, deliberately.
+ *
+ * Prime Group's .hero is `padding:0; display:flex; align-items:center` and
+ * nothing else — its height comes entirely from the content plus .hero-inner's
+ * 140/80 padding. This had min-h-[92vh], which on a 1440px-tall 2K screen
+ * stretched the hero to 1325px and left the copy marooned in the middle of an
+ * empty photograph. Sizing to content is the whole reason theirs still looks
+ * right on a big monitor.
+ */
 export function Hero() {
   return (
-    <section className="on-dark relative min-h-[86vh] md:min-h-[92vh] overflow-hidden bg-navy-deep flex items-center">
+    <section className="on-dark relative overflow-hidden bg-navy-deep flex items-center">
       <div className="absolute inset-0">
         <Photo
           name="hero-lead"
@@ -83,7 +93,7 @@ export function Hero() {
           stacks under the copy, which costs nothing.
         */}
         <div className="grid gap-12 xl:grid-cols-12">
-          <div className="xl:col-span-7">
+          <div className="xl:order-1 xl:col-span-7">
           <Reveal className="mb-6">
             <span className="hero-tag">
               <span className="relative flex h-1.5 w-1.5">
@@ -151,19 +161,29 @@ export function Hero() {
             </Link>
           </Reveal>
 
+          </div>
+
           {/*
-            2x2 now, not a row of four. With the form taking five columns the
-            cards share the other seven, and four across would leave each about
-            150px wide — narrower than the labels inside them.
+            The four proof points, BELOW both columns and spanning the full
+            container — a single row of four, as Prime Group has them.
+
+            They cannot live in the copy column: squeezed into the seven columns
+            beside the form, four across would be about 150px each, narrower than
+            their own labels. Out here each one gets roughly 284px.
+
+            2x2 on a phone, one row from lg. In the DOM they sit BETWEEN the
+            copy and the form, so a phone reads copy -> proof -> form; on xl the
+            order classes put the form back beside the copy and drop the cards
+            onto their own full-width row underneath.
           */}
-          <Reveal delay={420} className="mt-9 grid auto-rows-fr grid-cols-2 gap-2.5">
+          <Reveal delay={420} className="mt-9 grid auto-rows-fr grid-cols-2 gap-2.5 lg:flex xl:order-3 xl:col-span-12">
             {[
               { mark: <Google size={22} />, value: site.reviews.rating, label: `${site.reviews.count}+ Google reviews` },
               { mark: <Spanner size={21} />, value: "25+", label: "Years experience" },
               { mark: <Shield size={21} />, value: "Lifetime", label: "Workmanship warranty" },
               { mark: <Tag size={21} />, value: "$0", label: "Call-out fee, ever" },
             ].map((s) => (
-              <div key={s.label} className="hero-card">
+              <div key={s.label} className="hero-card lg:flex-1">
                 <span className="grid h-7 w-7 flex-none place-items-center text-white">
                   {s.mark}
                 </span>
@@ -174,7 +194,6 @@ export function Hero() {
               </div>
             ))}
           </Reveal>
-          </div>
 
           {/*
             The quote form, in the hero rather than only halfway down the page.
@@ -184,10 +203,11 @@ export function Hero() {
             two copies would have meant two elements sharing one id, and the
             scroll target would have been whichever the browser found first.
           */}
-          <Reveal delay={200} className="on-light xl:col-span-5">
+          <Reveal delay={200} className="on-light xl:order-2 xl:col-span-5">
             <QuoteForm />
           </Reveal>
         </div>
+
       </div>
     </section>
   );

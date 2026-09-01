@@ -387,6 +387,30 @@ export function QuoteForm({
           Back
         </button>
       )}
+
+      {/*
+        A standing footer, on every step.
+
+        Two jobs. It gives the card the vertical presence it was missing beside
+        a full column of copy — the form was the shorter of the two and read as
+        an afterthought. And it means the phone number is never more than one
+        glance away: a form is the wrong answer for someone whose ceiling is
+        currently leaking, and until now they had to scroll back up to find an
+        alternative.
+      */}
+      <div className="mt-7 flex flex-wrap items-center justify-between gap-3 border-t border-[var(--rule)] pt-5">
+        <span className="mi flex items-center gap-2" style={{ color: "var(--ink-3)" }}>
+          <Clock size={13} />
+          Same-day reply, most days
+        </span>
+        <a
+          href={site.phoneHref}
+          className="mi-lg inline-flex items-center gap-2 text-ink transition-colors hover:text-aqua"
+        >
+          <Phone size={14} />
+          {site.phone}
+        </a>
+      </div>
     </div>
   );
 }
