@@ -164,7 +164,17 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
             <h2 className="dsp-sm max-w-[880px] text-[clamp(24px,3.8vw,40px)]">{service.why.heading}</h2>
           </Reveal>
 
-          <div className="grid gap-px bg-[var(--rule)] md:grid-cols-2 lg:grid-cols-3">
+          {/*
+            The column count follows the POINT COUNT, because the 1px dividers
+            are the grid background showing through gap-px — which means any
+            cell that has no card in it paints as a solid rule-coloured block.
+            Drainage has four points; in three columns that left two grey
+            rectangles on the second row. Four points go 2x2, three go 3-across,
+            and neither ever has an empty cell at any breakpoint.
+          */}
+          <div className={`grid overflow-hidden rounded-2xl border border-[var(--rule)] gap-px bg-[var(--rule)] ${
+            service.why.points.length === 4 ? "sm:grid-cols-2" : "md:grid-cols-3"
+          }`}>
             {service.why.points.map((p, i) => (
               <Reveal key={p.term} delay={i * 90} className="bg-paper p-7 md:p-9">
                 <span className="mi block" style={{ color: "var(--aqua)" }}>
@@ -192,9 +202,9 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
           <Reveal className="mi eyebrow mb-10">
             <span>Other services</span>
           </Reveal>
-          <div className="grid gap-px bg-[var(--rule)] md:grid-cols-3">
+          <div className="grid overflow-hidden rounded-2xl border border-[var(--rule)] gap-px bg-[var(--rule)] md:grid-cols-3">
             {others.map((o, i) => (
-              <Reveal key={o.slug} delay={i * 80}>
+              <Reveal key={o.slug} delay={i * 80} className="bg-paper">
                 <Link href={`/services/${o.slug}/`} className="group block h-full bg-paper transition-colors duration-500 hover:bg-navy">
                   <div className="plate plate-zoom aspect-[16/10]">
                     <Photo name={o.image} alt={o.imageAlt} sizes="(min-width: 768px) 33vw, 100vw" />

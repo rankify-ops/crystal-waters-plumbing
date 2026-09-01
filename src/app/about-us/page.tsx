@@ -123,7 +123,7 @@ export default function AboutPage() {
             </Reveal>
           </div>
 
-          <div className="grid gap-px bg-[var(--rule)] md:grid-cols-3">
+          <div className="grid overflow-hidden rounded-2xl border border-[var(--rule)] gap-px bg-[var(--rule)] md:grid-cols-3">
             {team.map((member, i) => (
               <Reveal key={member.name} delay={i * 90} className="bg-paper">
                 <div className="plate aspect-[4/5]">

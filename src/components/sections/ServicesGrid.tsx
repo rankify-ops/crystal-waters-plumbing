@@ -45,9 +45,9 @@ export function ServicesGrid({ heading = true }: { heading?: boolean }) {
           </>
         )}
 
-        <div className="grid gap-px bg-[var(--rule)] md:grid-cols-2">
+        <div className="grid overflow-hidden rounded-2xl border border-[var(--rule)] gap-px bg-[var(--rule)] md:grid-cols-2">
           {services.map((s, i) => (
-            <Reveal key={s.slug} delay={i * 80}>
+            <Reveal key={s.slug} delay={i * 80} className="bg-paper">
               <Link
                 href={`/services/${s.slug}/`}
                 className="group relative block h-full bg-paper transition-colors duration-500 hover:bg-navy"

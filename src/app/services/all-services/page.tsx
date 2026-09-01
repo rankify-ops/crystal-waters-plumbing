@@ -41,9 +41,9 @@ export default function AllServicesPage() {
           <Reveal className="mi eyebrow mb-10">
             <span>Main services</span>
           </Reveal>
-          <div className="grid gap-px bg-[var(--rule)] md:grid-cols-2 lg:grid-cols-4">
+          <div className="grid overflow-hidden rounded-2xl border border-[var(--rule)] gap-px bg-[var(--rule)] md:grid-cols-2 lg:grid-cols-4">
             {services.map((s, i) => (
-              <Reveal key={s.slug} delay={i * 70}>
+              <Reveal key={s.slug} delay={i * 70} className="bg-paper">
                 <Link href={`/services/${s.slug}/`} className="group block h-full bg-paper transition-colors duration-500 hover:bg-navy">
                   <div className="plate plate-zoom aspect-[4/3]">
                     <Photo name={s.image} alt={s.imageAlt} sizes="(min-width: 1024px) 25vw, 50vw" />
