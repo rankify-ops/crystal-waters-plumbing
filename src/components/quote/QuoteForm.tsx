@@ -25,11 +25,14 @@ import {
  *   - Urgency comes second, not third. For a plumber it is the field that
  *     changes what happens next, so it is asked while the form still has the
  *     person's attention. An "emergency" answer tags the email subject URGENT
- *     so it is triaged on arrival — but it does NOT interrupt the form. That
- *     was tried: choosing it held the panel and offered the phone instead of
- *     question three. Someone who has chosen to type rather than ring has
- *     already made that decision, and being stopped and asked again reads as
- *     the form refusing to take the job.
+ *     so it is triaged on arrival, and that is ALL it does — it changes nothing
+ *     the person filling the form sees. Two versions that did were removed:
+ *     one held the form on question two and offered the phone instead of
+ *     advancing, the other changed the thank-you copy to tell them to ring.
+ *     Someone who opened a four-step form has chosen to type rather than call,
+ *     and has already walked past the number in the header, the hero, the
+ *     floating bar and this form's own footer. Pushing it at them again reads
+ *     as the form refusing to take the job.
  *   - Back is a single control in the progress row, not a button per step.
  *
  * Submission goes to Web3Forms, which is what the other Rankify plumbing builds
@@ -213,9 +216,9 @@ export function QuoteForm({
           </div>
           <h3 className="dsp-sm text-[26px]">Thanks — we have got it</h3>
           <p className="bd mx-auto mt-4 max-w-[400px]">
-            {emergency
-              ? "You flagged this as urgent, so if you have not heard from us in the next few minutes, please call — that is the fastest way to reach us."
-              : "A member of the team will call you back to talk it through and give you a price. No call-out fee, and nothing starts until you approve the number."}
+            A member of the team will call you back to talk it through and give
+            you a price. No call-out fee, and nothing starts until you approve
+            the number.
           </p>
           <a href={site.phoneHref} className="pill mt-8">
             <Phone size={15} />
