@@ -44,15 +44,15 @@ export default function AllServicesPage() {
           <div className="grid overflow-hidden rounded-2xl border border-[var(--rule)] gap-px bg-[var(--rule)] md:grid-cols-2 lg:grid-cols-4">
             {services.map((s, i) => (
               <Reveal key={s.slug} delay={i * 70} className="bg-paper">
-                <Link href={`/services/${s.slug}/`} className="group block h-full bg-paper transition-colors duration-500 hover:bg-navy">
+                <Link href={`/services/${s.slug}/`} className="group flex h-full flex-col bg-paper transition-colors duration-500 hover:bg-navy">
                   <div className="plate plate-zoom aspect-[4/3]">
                     <Photo name={s.image} alt={s.imageAlt} sizes="(min-width: 1024px) 25vw, 50vw" />
                   </div>
-                  <div className="p-6">
+                  <div className="flex flex-1 flex-col p-6">
                     <h3 className="dsp-sm text-[17px] transition-colors duration-500 group-hover:text-white">
                       {s.nav}
                     </h3>
-                    <span className="mi mt-3 inline-flex items-center gap-2 transition-colors duration-500 group-hover:text-white" style={{ color: "var(--aqua)" }}>
+                    <span className="mi mt-auto self-start pt-3 inline-flex items-center gap-2 transition-colors duration-500 group-hover:text-white" style={{ color: "var(--aqua)" }}>
                       View
                       <Arrow size={12} className="transition-transform duration-500 group-hover:translate-x-1" />
                     </span>

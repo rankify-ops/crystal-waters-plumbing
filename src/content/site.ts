@@ -117,33 +117,33 @@ export type Service = {
 export const services: Service[] = [
   {
     slug: "bathroom-kitchen",
-    nav: "Kitchen & Bathroom",
-    title: "Kitchen & Bathroom Renovations",
-    metaTitle: "Kitchen & Bathroom Plumbing Gold Coast | Crystal Waters Plumbing",
+    nav: "Kitchen or Bathroom Renovation",
+    title: "Kitchen or Bathroom Renovation",
+    metaTitle: "Kitchen or Bathroom Renovation Gold Coast | Crystal Waters Plumbing",
     metaDescription:
-      "Kitchen and bathroom renovation plumbing across the Gold Coast. Fully licensed, upfront pricing, lifetime workmanship warranty. Call 0412 402 399.",
-    lead: "Choose Crystal Waters Plumbing & Drainage for your next kitchen or bathroom renovation. Our team of respectful, reliable plumbers is committed to first-class workmanship. When it comes to Gold Coast kitchen and bathroom renovations, trust only the experts.",
+      "Kitchen or bathroom renovation plumbing across the Gold Coast. Fully licensed, upfront pricing, lifetime workmanship warranty. Call 0412 402 399.",
+    lead: "Choose Crystal Waters Plumbing & Drainage for your next kitchen or bathroom renovation. Our team of respectful, reliable plumbers is committed to first-class workmanship. When it comes to Gold Coast kitchen or bathroom renovations, trust only the experts.",
     image: "g-shower",
     imageAlt: "Completed bathroom in black marble tile with freestanding bath and wall-mounted mixer",
     blocks: [
       {
-        label: "Kitchen & bathroom specialists",
-        heading: "Kitchen & bathroom renovations on the Gold Coast",
+        label: "Kitchen or bathroom renovation",
+        heading: "Kitchen or bathroom renovations on the Gold Coast",
         body: [
           "Are you considering a transformation for the bathroom or kitchen in your Gold Coast home? Is your current space in need of a refresh, or a complete overhaul? Look no further than Crystal Waters Plumbing & Drainage — your premier choice for bathroom and kitchen renovations in the region.",
           "Are your bathroom and kitchen showing signs of wear and tear, feeling outdated, or simply not meeting your lifestyle needs? Our team of experienced professionals specialises in breathing new life into these spaces, improving both how they look and how they work. We have been the go-to choice for countless Gold Coast homeowners looking for a transformation that lifts their whole home.",
         ],
       },
       {
-        label: "Kitchen & bathroom specialists",
-        heading: "Your kitchen & bathroom experts on the Gold Coast",
+        label: "Renovation specialists",
+        heading: "Your kitchen or bathroom renovation experts on the Gold Coast",
         body: [
           "We offer a comprehensive range of renovation services tailored to your specific needs, from minor touch-ups to full-scale overhauls. Our plumbers are not only fully qualified and insured, they have the experience needed to get the plumbing right first time on a renovation — where a mistake behind a wall is an expensive one.",
           "Rest assured, when you choose Crystal Waters Plumbing & Drainage you are choosing a team of professionals dedicated to your satisfaction. Our plumbers are ready to respond promptly when you need us most. Trust the Gold Coast's leading renovation experts to turn your vision into reality.",
         ],
       },
     ],
-    listLabel: "Kitchen & bathroom services",
+    listLabel: "Kitchen or bathroom renovation services",
     list: [
       "Replacement of showerheads and tapware",
       "Upgrades for showers, sinks and baths",

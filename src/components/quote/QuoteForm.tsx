@@ -53,7 +53,7 @@ const JOB: Option[] = [
   { value: "Blocked drain", label: "Blocked drain", note: "Sink, toilet, shower or main line", Icon: Drain },
   { value: "Hot water", label: "Hot water", note: "No hot water, or time to replace", Icon: Cylinder },
   { value: "Leak or burst pipe", label: "Leak or burst pipe", note: "Including hidden and underground", Icon: Drip },
-  { value: "Kitchen or bathroom", label: "Kitchen or bathroom", note: "Renovation, upgrade or fit-off", Icon: Bath },
+  { value: "Kitchen or bathroom renovation", label: "Kitchen or bathroom renovation", note: "New fit-off, upgrade or full reno", Icon: Bath },
   { value: "Gas", label: "Gas fitting or gas leak", note: "Appliances, lines and leaks", Icon: Flame },
   { value: "Something else", label: "Something else", note: "Tell us and we will sort it", Icon: Chat },
 ];

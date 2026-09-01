@@ -83,7 +83,7 @@ export const Check = (p: P) => (
    One per job type on the quote form's first question. Each is the thing
    itself: a bath, a hot water cylinder, a drain grate, a drip, a flame. */
 
-/** Kitchen & bathroom. A bath with its tap riser. */
+/** Kitchen or bathroom renovation. A bath with its tap riser. */
 export const Bath = (p: P) => (
   <Svg {...p}>
     <path d="M3 12.5h18" />

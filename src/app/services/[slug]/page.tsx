@@ -235,7 +235,7 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
  * fields in QuoteForm's JOB list exactly.
  */
 const PRESET: Record<string, string> = {
-  "bathroom-kitchen": "Kitchen or bathroom",
+  "bathroom-kitchen": "Kitchen or bathroom renovation",
   "hot-water-systems": "Hot water",
   "drainage-blockages": "Blocked drain",
   "water-leaks": "Leak or burst pipe",
