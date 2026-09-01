@@ -201,7 +201,7 @@ export function QuoteForm({
   /* ── Done ──────────────────────────────────────────────────────────── */
   if (status === "done") {
     return (
-      <div className={`rounded-3xl border border-[var(--rule)] bg-paper p-8 shadow-[0_18px_50px_rgba(6,42,68,0.10)] md:p-11 ${className}`} id="quote">
+      <div className={`@container rounded-3xl border border-[var(--rule)] bg-paper p-8 shadow-[0_18px_50px_rgba(6,42,68,0.10)] @[40rem]:p-11 ${className}`} id="quote">
         <div className="mb-7 h-[4px] w-full overflow-hidden rounded-full bg-[var(--rule)]">
           <div className="h-full bg-aqua" style={{ width: "100%" }} />
         </div>
@@ -229,7 +229,16 @@ export function QuoteForm({
   /* ── Form ──────────────────────────────────────────────────────────── */
   return (
     <div
-      className={`rounded-3xl border border-[var(--rule)] bg-paper p-6 shadow-[0_18px_50px_rgba(6,42,68,0.10)] sm:p-8 md:p-10 ${className}`}
+      /*
+       * @container, not viewport breakpoints.
+       *
+       * This same form renders at 459px in the hero and at roughly 660px in a
+       * QuoteBand, on the same viewport. Sizing its internals off the SCREEN
+       * width therefore gets one of the two wrong every time — in the hero it
+       * gave two columns of 190px and every option label wrapped to three
+       * lines. The rules below measure this card instead.
+       */
+      className={`@container rounded-3xl border border-[var(--rule)] bg-paper p-5 shadow-[0_18px_50px_rgba(6,42,68,0.10)] @[26rem]:p-7 @[40rem]:p-9 ${className}`}
       id="quote"
       // Focusable so QuoteLink can move the keyboard as well as the viewport.
       tabIndex={-1}
@@ -244,7 +253,10 @@ export function QuoteForm({
           </span>
         )}
       </div>
-      <p className="bd-sm mb-6">
+      {/* 60ch cap. Unbounded this ran 91 characters a line inside a wide
+          QuoteBand card — fine for two lines, but loose enough to read as
+          filler under a heading. */}
+      <p className="bd-sm mb-6 max-w-[60ch]">
         {compact
           ? "Leave your details and we will call you back with a price. No call-out fee, no obligation."
           : "Four quick questions. No call-out fee, no obligation."}
@@ -266,7 +278,7 @@ export function QuoteForm({
         {/* Step 1 — job */}
         {step === 0 && (
           <Panel heading="What do you need done?" sub="Pick whichever is closest.">
-            <div className="grid gap-2.5 sm:grid-cols-2">
+            <div className="grid gap-2.5 @[22rem]:grid-cols-2">
               {JOB.map((o) => (
                 <Choice key={o.value} option={o} selected={answers.job === o.value} onSelect={() => choose("job", o.value)} />
               ))}
@@ -312,7 +324,7 @@ export function QuoteForm({
         {/* Step 3 — property */}
         {step === 2 && (
           <Panel heading="What sort of property?" sub="Units and body corporate jobs have their own paperwork.">
-            <div className="grid gap-2.5 sm:grid-cols-2">
+            <div className="grid gap-2.5 @[22rem]:grid-cols-2">
               {PROPERTY.map((o) => (
                 <Choice key={o.value} option={o} selected={answers.property === o.value} onSelect={() => choose("property", o.value)} />
               ))}
@@ -424,8 +436,12 @@ function Choice({
       </span>
       <span className="min-w-0">
         <span className="mi-lg block text-ink">{option.label}</span>
+        {/* The supporting note is the first thing to go in a narrow card. In
+            the hero it wrapped to three lines under a two-line label and the
+            tile stopped being scannable at all; the label alone still says
+            what the option is. */}
         {option.note && (
-          <span className="bd-sm mt-1 block leading-snug">{option.note}</span>
+          <span className="bd-sm mt-1 hidden leading-snug @[30rem]:block">{option.note}</span>
         )}
       </span>
     </button>

@@ -5,7 +5,6 @@ import { ServicesGrid } from "@/components/sections/ServicesGrid";
 import { Process } from "@/components/sections/Process";
 import { Reviews } from "@/components/sections/Reviews";
 import { Faq } from "@/components/sections/Faq";
-import { QuoteBand } from "@/components/sections/QuoteBand";
 import { Photo } from "@/components/ui/Photo";
 import { Reveal } from "@/components/ui/Reveal";
 import { Arrow } from "@/components/ui/Icons";
@@ -20,7 +19,6 @@ export default function Home() {
       <Intro />
       <Process />
       <Reviews limit={6} />
-      <QuoteBand />
       <Faq limit={5} />
     </>
   );

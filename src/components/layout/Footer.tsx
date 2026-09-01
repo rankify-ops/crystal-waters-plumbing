@@ -169,9 +169,22 @@ export function Footer() {
           <h3 className="mi mb-5" style={{ color: "var(--aqua-bright)" }}>
             Areas we cover
           </h3>
-          <p className="bd-sm leading-[2]">
-            {suburbs.join(" · ")}
-          </p>
+          {/*
+            A list in columns, not a run-on sentence.
+
+            These 29 suburbs were joined with " · " into a single paragraph
+            spanning the full 1168px measure — about 173 characters per line,
+            which is roughly twice the width the eye can track and impossible
+            to scan for your own suburb. As a multi-column list each name is
+            its own line and the whole set is read by jumping down a column.
+          */}
+          <ul className="columns-2 gap-x-8 sm:columns-3 lg:columns-4 xl:columns-5">
+            {suburbs.map((s) => (
+              <li key={s} className="bd-sm break-inside-avoid py-[3px]">
+                {s}
+              </li>
+            ))}
+          </ul>
         </div>
 
         <div className="mt-12 flex flex-col gap-4 border-t border-[var(--rule)] pt-8 md:flex-row md:items-center md:justify-between">

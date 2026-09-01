@@ -4,6 +4,7 @@ import { Photo } from "@/components/ui/Photo";
 import { Reveal } from "@/components/ui/Reveal";
 import { Phone, Arrow, Google, Spanner, Shield, Tag } from "@/components/ui/Icons";
 import { QuoteLink } from "@/components/ui/QuoteLink";
+import { QuoteForm } from "@/components/quote/QuoteForm";
 
 /*
  * The home hero.
@@ -72,9 +73,17 @@ export function Hero() {
         content drifting to the middle of the frame.
       */}
       <div className="wrap relative w-full pb-[70px] pt-[120px] lg:pb-20 lg:pt-[140px]">
-        {/* GHP .hero-content: a 600px column. Everything below sits inside it,
-            so the headline wraps where the reference wraps. */}
-        <div className="max-w-[600px]">
+        {/*
+          THE SPLIT STARTS AT xl (1280), NOT lg.
+
+          Measured, not guessed: "plumbing & drainage" runs 616px at the 57.6px
+          cap and is set never to break, while a 7-of-12 column is only 523px
+          at 1024 and 597px at 1152 — the headline would be clipped at both. It
+          first clears at 1280, where the column is 653px. Below that the form
+          stacks under the copy, which costs nothing.
+        */}
+        <div className="grid gap-12 xl:grid-cols-12">
+          <div className="xl:col-span-7">
           <Reveal className="mb-6">
             <span className="hero-tag">
               <span className="relative flex h-1.5 w-1.5">
@@ -142,22 +151,19 @@ export function Hero() {
             </Link>
           </Reveal>
 
-        </div>
-
-        {/*
-          The cards sit OUTSIDE the 600px content column, which is where GHP
-          has them: .hero-cards is a sibling of .hero-content inside .ctr, not
-          a child of it. Nested inside, four cards had to share 600px and every
-          label wrapped to three lines.
-        */}
-          <Reveal delay={420} className="mt-9 grid auto-rows-fr grid-cols-2 gap-2.5 lg:flex">
+          {/*
+            2x2 now, not a row of four. With the form taking five columns the
+            cards share the other seven, and four across would leave each about
+            150px wide — narrower than the labels inside them.
+          */}
+          <Reveal delay={420} className="mt-9 grid auto-rows-fr grid-cols-2 gap-2.5">
             {[
               { mark: <Google size={22} />, value: site.reviews.rating, label: `${site.reviews.count}+ Google reviews` },
               { mark: <Spanner size={21} />, value: "25+", label: "Years experience" },
               { mark: <Shield size={21} />, value: "Lifetime", label: "Workmanship warranty" },
               { mark: <Tag size={21} />, value: "$0", label: "Call-out fee, ever" },
             ].map((s) => (
-              <div key={s.label} className="hero-card lg:flex-1">
+              <div key={s.label} className="hero-card">
                 <span className="grid h-7 w-7 flex-none place-items-center text-white">
                   {s.mark}
                 </span>
@@ -166,8 +172,22 @@ export function Hero() {
                   <span className="hero-card-label mt-1 block">{s.label}</span>
                 </span>
               </div>
-          ))}
-        </Reveal>
+            ))}
+          </Reveal>
+          </div>
+
+          {/*
+            The quote form, in the hero rather than only halfway down the page.
+
+            It carries id="quote", so every "get a free quote" control now
+            resolves here. QuoteBand is removed from the home page as a result:
+            two copies would have meant two elements sharing one id, and the
+            scroll target would have been whichever the browser found first.
+          */}
+          <Reveal delay={200} className="on-light xl:col-span-5">
+            <QuoteForm />
+          </Reveal>
+        </div>
       </div>
     </section>
   );

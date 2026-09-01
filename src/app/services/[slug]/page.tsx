@@ -80,9 +80,32 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
                 <Reveal variant="mask">
                   <h2 className="dsp-sm text-[clamp(24px,3.6vw,38px)]">{block.heading}</h2>
                 </Reveal>
+                {/*
+                  Two changes for scanning, both measured.
+
+                  MEASURE: these ran 680px at 17px — about 84 characters a
+                  line, well past the 60–75 the eye tracks comfortably. 620px
+                  brings it to roughly 76 and, more usefully, adds a line break
+                  every 12 words or so instead of every 14.
+
+                  ENTRY POINT: the first paragraph of each block is now set as
+                  a lead — larger and in full-strength ink rather than the
+                  secondary grey. A 60-word paragraph in uniform grey has
+                  nowhere for the eye to land; giving the opening sentence
+                  weight means the block can be skimmed by reading only its
+                  first paragraph, which is how these pages are actually read.
+                */}
                 {block.body.map((p, j) => (
                   <Reveal key={j} delay={100 + j * 70}>
-                    <p className="bd-lg mt-6 max-w-[680px]">{p}</p>
+                    <p
+                      className={
+                        j === 0
+                          ? "mt-6 max-w-[620px] text-[19px] font-medium leading-[1.6] text-ink"
+                          : "bd-lg mt-5 max-w-[620px]"
+                      }
+                    >
+                      {p}
+                    </p>
                   </Reveal>
                 ))}
               </div>
